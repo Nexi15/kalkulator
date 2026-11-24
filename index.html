@@ -4,33 +4,61 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kalkulator craftingu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f6f3;--card:#fff;--tx:#1d1d1b;--mu:#6b6b66;--bd:#dcdcd6;--ac:#c2410c;--ok:#15803d;--bad:#b91c1c;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--card:#212120;--tx:#ececE8;--mu:#9a9a94;--bd:#363633;--ac:#fb923c;--ok:#4ade80;--bad:#f87171;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#161615;--card:#212120;--tx:#ececE8;--mu:#9a9a94;--bd:#363633;--ac:#fb923c;--ok:#4ade80;--bad:#f87171;color-scheme:dark}
+:root{--bg:#0e2a47;--card:#123659;--field:#0b2238;--tx:#e8f1f8;--mu:#93b3cf;--bd:rgba(214,232,247,.30);--bd2:rgba(214,232,247,.14);--grid:rgba(214,232,247,.05);--ac:#ffbf3c;--acx:#0e2a47;--hi:#ffbf3c;--ok:#7fe3b0;--bad:#ff8f72;--hov:rgba(214,232,247,.08);
+--disp:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;--body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#e9eff4;--card:#fff;--field:#f5f8fb;--tx:#12315a;--mu:#4a6985;--bd:rgba(18,49,90,.32);--bd2:rgba(18,49,90,.14);--grid:rgba(18,49,90,.06);--ac:#ffb000;--acx:#12315a;--hi:#a85a00;--ok:#17703d;--bad:#b3321a;--hov:rgba(18,49,90,.07);color-scheme:light}}
+:root[data-theme="light"]{--bg:#e9eff4;--card:#fff;--field:#f5f8fb;--tx:#12315a;--mu:#4a6985;--bd:rgba(18,49,90,.32);--bd2:rgba(18,49,90,.14);--grid:rgba(18,49,90,.06);--ac:#ffb000;--acx:#12315a;--hi:#a85a00;--ok:#17703d;--bad:#b3321a;--hov:rgba(18,49,90,.07);color-scheme:light}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:760px;margin:0 auto;padding:16px}
-h1{font-size:22px;margin:4px 0 12px}
-nav{display:flex;gap:6px;margin-bottom:14px}
-nav button{flex:1;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;font-size:15px;cursor:pointer}
-nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:12px}
-input{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px 9px;min-width:0}
-input[type=number]{width:84px}
-button.s{font:inherit;padding:7px 12px;border-radius:6px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
-button.s.p{background:var(--ac);color:#fff;border-color:var(--ac)}
-button.x{border:0;background:none;color:var(--bad);font-size:18px;cursor:pointer}
-.row{display:flex;gap:8px;align-items:center;margin:6px 0}
-.row input[type=text]{flex:1}
-.big{font-size:34px;font-weight:700;line-height:1}
+body{margin:0;min-height:100vh;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--tx);font:16px/1.5 var(--body)}
+main{max-width:1080px;margin:0 auto;padding:20px 16px 48px}
+h1{font:800 clamp(34px,7vw,52px)/1 var(--disp);letter-spacing:.01em;margin:6px 0 18px}
+h2{font:700 28px/1.1 var(--disp);letter-spacing:.01em;margin:30px 0 10px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";width:8px;height:22px;background:var(--ac);flex:none}
+#v2{max-width:760px}
+nav{display:flex;gap:4px;border-bottom:1px solid var(--bd);margin-bottom:20px}
+nav button{flex:1;max-width:200px;padding:9px 16px 8px;border:1px solid transparent;border-bottom:0;border-radius:3px 3px 0 0;background:transparent;color:var(--mu);font:600 21px/1.2 var(--disp);letter-spacing:.01em;cursor:pointer}
+nav button:hover{background:var(--hov)}
+nav button.on{background:var(--card);color:var(--tx);border-color:var(--bd);box-shadow:inset 0 3px 0 var(--ac);margin-bottom:-1px;padding-bottom:9px}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:3px;padding:16px;margin-bottom:14px}
+#v0{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start}
+#v0 .card{margin:0}
+#tot{grid-column:1/-1}#tot:empty{display:none}
+#tot .card{border-color:var(--ac);box-shadow:inset 4px 0 0 var(--ac)}
+.card>b{font:700 24px/1.1 var(--disp);display:block;margin-bottom:2px}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--bd)}
+.hd>div:first-child>b{font:700 26px/1.1 var(--disp);display:block;margin-bottom:6px}
+.hd>div:last-child{text-align:right}
+.big{font:800 68px/.9 var(--disp);margin:2px 0 6px}
+.big small{font:600 22px/1 var(--disp);color:var(--mu);margin-left:6px}
+.big.ok{color:var(--hi)}.big.bad{color:var(--bad)}
 .mu{color:var(--mu);font-size:14px}
 .ok{color:var(--ok)}.bad{color:var(--bad)}
-.tw{overflow-x:auto}
+#v0 [id^="b"]:not(:empty){border-left:3px solid var(--ac);padding-left:12px}
+input{font:inherit;color:var(--tx);background:var(--field);border:1px solid var(--bd);border-radius:3px;padding:8px 10px;min-width:0}
+input[type=number]{width:88px;text-align:right;font-variant-numeric:tabular-nums}
+button.s{font:500 15px/1.2 var(--body);padding:9px 14px;border-radius:3px;border:1px solid var(--bd);background:transparent;color:var(--tx);cursor:pointer}
+button.s:hover{background:var(--hov)}
+button.s.p{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:600}
+button.s.p:hover{filter:brightness(1.08)}
+button.x{border:0;background:none;color:var(--bad);font-size:22px;line-height:1;padding:4px 8px;cursor:pointer;border-radius:3px}
+button.x:hover{background:var(--hov)}
+.row{display:flex;gap:8px;align-items:center;margin:6px 0}
+.row input[type=text]{flex:1}
+#v1 .card{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));column-gap:24px}
+.tag{font-size:12px;color:var(--mu);border:1px solid var(--bd);border-radius:2px;padding:0 6px;margin-left:8px}
+.tw{overflow-x:auto;margin-top:10px}
 table{width:100%;border-collapse:collapse;font-size:15px}
-td,th{padding:6px 8px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
-th{color:var(--mu);font-weight:500;font-size:13px}
-.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+td,th{padding:7px 8px;text-align:left;border-bottom:1px dashed var(--bd2);font-variant-numeric:tabular-nums}
+th{color:var(--mu);font-weight:500;font-size:13px;border-bottom:1px solid var(--bd)}
+td:nth-child(n+2),th:nth-child(n+2){text-align:right;white-space:nowrap}
+summary{cursor:pointer;padding:4px 0}
+@media (max-width:560px){.big{font-size:58px}.hd{flex-wrap:wrap}.hd>div:last-child{text-align:left}nav button{max-width:none;padding-left:6px;padding-right:6px}}
 </style>
 </head>
 <body>
@@ -48,61 +76,130 @@ th{color:var(--mu);font-weight:500;font-size:13px}
 </main>
 <script>
 var K='craftcalc1';
-var SAMPLE={mats:[{n:'Żelazo',q:23},{n:'Skóra',q:7},{n:'Drewno',q:30},{n:'Nić',q:5}],
-recipes:[{n:'Miecz (przykład)',w:1,i:[{n:'Żelazo',q:5},{n:'Skóra',q:2}]},{n:'Łuk (przykład)',w:1,i:[{n:'Drewno',q:6},{n:'Nić',q:3}]}]};
-var S=load(),cur=0;
-function load(){try{var r=localStorage.getItem(K);if(r)return JSON.parse(r)}catch(e){}return JSON.parse(JSON.stringify(SAMPLE))}
+var VAR={'CUSTOM':['Żelazny gwóźdź','Wygięta żelazna rurka','Metalowa rynna'],'CERAMIK':['Żelazny gwóźdź','Blok silnika','Metalowy kawałek ramy'],'COMBAT':['Śmieć elektroniczny','Śruba','Metalowy kawałek szyny'],'SNS MK2':['Kawałek gumowej podkładki','Kawałek blachy','Metalowa rura']};
+var SAMPLE=build();
+function build(){var rec=[],names={};
+ Object.keys(VAR).forEach(function(v){var o=VAR[v],mag='Magazynek '+v,kor='Korpus '+v,luf='Lufa '+v;
+  rec.push({n:'Klamka '+v,t:'w',w:0,i:[{n:mag,q:1},{n:kor,q:1},{n:luf,q:1},{n:'Blueprint '+v,q:1},{n:'Sprężynka',q:2}]});
+  rec.push({n:mag,t:'p',i:[{n:'Magazynek',q:1},{n:'Uszkodzone nadkole',q:4},{n:o[0],q:6},{n:'Gumowa uszczelka',q:4},{n:'Część metalowa',q:2}]});
+  rec.push({n:kor,t:'p',i:[{n:'Korpus SNS',q:4},{n:'Kawałek stopu metalu',q:3},{n:o[1],q:5},{n:'Kawałek opony',q:2},{n:'Gumowa podkładka',q:2}]});
+  rec.push({n:luf,t:'p',i:[{n:'Lufa SNS',q:3},{n:o[2],q:2},{n:'Wał od silnika',q:5},{n:'Drzwiczki do sejfu',q:1},{n:'Zardzewiała blacha',q:3}]})});
+ rec.forEach(function(r){if(r.t=='p')names[key(r.n)]=r.n;r.i.forEach(function(g){names[key(g.n)]=g.n})});
+ var mats=Object.keys(names).map(function(k){return names[k]}).sort(function(a,b){return a.localeCompare(b,'pl')}).map(function(n){return {n:n,q:0}});
+ return {mats:mats,recipes:rec}}
+var S=load();
+function load(){try{var r=localStorage.getItem(K);if(r){var d=JSON.parse(r);if(!d.recipes.some(function(x){return x.n=='Karabin (przykład)'}))return d}}catch(e){}return JSON.parse(JSON.stringify(SAMPLE))}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
-function have(n){var k=n.trim().toLowerCase();for(var m of S.mats)if(m.n.trim().toLowerCase()==k)return m.q;return 0}
-function ensure(n){n=n.trim();if(!n)return;var k=n.toLowerCase();if(!S.mats.some(m=>m.n.trim().toLowerCase()==k))S.mats.push({n:n,q:0})}
-function tab(i){cur=i;for(var k=0;k<3;k++){document.getElementById('v'+k).hidden=k!=i;document.getElementById('t'+k).className=k==i?'on':''}
-[sum,stock,recipes][i]();
-document.getElementById('dl').innerHTML=S.mats.map(m=>'<option value="'+esc(m.n)+'">').join('')}
+function key(n){return String(n).trim().toLowerCase()}
+function have(n){var k=key(n),t=0;S.mats.forEach(m=>{if(key(m.n)==k)t+=+m.q||0});return t}
+function ensure(n){n=String(n).trim();if(!n)return;if(!S.mats.some(m=>key(m.n)==key(n)))S.mats.push({n:n,q:0})}
+function find(n){var k=key(n);return S.recipes.find(r=>key(r.n)==k)}
+function valid(r){return r&&r.i.some(g=>g.n.trim()&&(+g.q||0)>0)}
+function stockMap(){var o={};S.mats.forEach(m=>{var k=key(m.n);o[k]=(o[k]||0)+(+m.q||0)});return o}
+function add(o,n,c){var k=key(n);if(!o[k])o[k]={n:n.trim(),c:0};o[k].c+=c}
+function resolve(name,n,st,req,pt,d){
+ if(n<=0)return;
+ var k=key(name),take=Math.min(st[k]||0,n);st[k]=(st[k]||0)-take;n-=take;
+ if(n<=0)return;
+ var r=find(name);
+ if(valid(r)&&d<12){add(pt,name,n);r.i.forEach(g=>{var q=+g.q||0;if(q>0&&g.n.trim())resolve(g.n,n*q,st,req,pt,d+1)})}
+ else add(req,name,n)}
+function maxN(name){
+ if(!valid(find(name)))return have(name);
+ function ok(n){var rq={};resolve(name,n,stockMap(),rq,{},0);return !Object.keys(rq).length}
+ if(!ok(1))return 0;
+ var lo=1,hi=2;
+ while(hi<1e6&&ok(hi)){lo=hi;hi*=2}
+ if(hi>=1e6&&ok(hi))return hi;
+ while(hi-lo>1){var m=Math.floor((lo+hi)/2);if(ok(m))lo=m;else hi=m}
+ return lo}
+function ren(old,nw){nw=nw.trim();if(!nw)return;var k=key(old);
+ S.mats.forEach(m=>{if(key(m.n)==k)m.n=nw});
+ S.recipes.forEach(r=>{if(r.t=='p'&&key(r.n)==k)r.n=nw;r.i.forEach(g=>{if(key(g.n)==k)g.n=nw})})}
+function dl(){document.getElementById('dl').innerHTML=S.mats.map(m=>'<option value="'+esc(m.n)+'">').join('')}
+function tab(i){for(var k=0;k<3;k++){document.getElementById('v'+k).hidden=k!=i;document.getElementById('t'+k).className=k==i?'on':''}
+ S.recipes.forEach(r=>{if(r.t=='p')ensure(r.n)});
+ [sum,stock,recipes][i]();dl()}
 
 function sum(){
-var h='';
-if(!S.recipes.length)h='<div class="card mu">Brak receptur. Dodaj je w zakładce Receptury.</div>';
-S.recipes.forEach(function(r,ri){
-var rows='',max=Infinity,lim='';
-r.i.forEach(function(g){
-var q=+g.q||0,hv=have(g.n);
-if(q<=0||!g.n.trim())return;
-var c=Math.floor(hv/q);
-if(c<max){max=c;lim=g.n}
-rows+='<tr><td>'+esc(g.n)+'</td><td>'+q+'</td><td>'+hv+'</td><td>'+c+' szt.</td><td id="m'+ri+'_'+esc(g.n)+'"></td></tr>'});
-if(max===Infinity)max=0;
-h+='<div class="card"><div class="hd"><div><b>'+esc(r.n)+'</b><div class="mu">Wystarczy na:</div><div class="big '+(max>0?'ok':'bad')+'">'+max+' szt.</div>'+
-(max===0&&lim?'<div class="mu">Brakuje: '+esc(lim)+'</div>':(lim?'<div class="mu">Ogranicza: '+esc(lim)+'</div>':''))+'</div>'+
-'<div class="mu">Chcę zrobić:<br><input type="number" min="0" value="'+(r.w||0)+'" oninput="want('+ri+',this.value)"></div></div>'+
-'<div class="tw"><table><tr><th>Materiał</th><th>Na 1 szt.</th><th>Mam</th><th>Starczy na</th><th>Brakuje</th></tr>'+rows+'</table></div></div>'});
-document.getElementById('v0').innerHTML=h;
-S.recipes.forEach((r,ri)=>want(ri,r.w||0,1))}
-function want(ri,v,nosave){
-var r=S.recipes[ri];r.w=Math.max(0,+v||0);
-r.i.forEach(function(g){var el=document.getElementById('m'+ri+'_'+esc(g.n));if(!el)return;
-var miss=Math.max(0,(+g.q||0)*r.w-have(g.n));el.innerHTML=r.w?(miss?'<span class="bad">'+miss+'</span>':'<span class="ok">ok</span>'):'–'});
-if(!nosave)save()}
+ var h='',any=false;
+ S.recipes.forEach(function(r,ri){
+  if(r.t=='p')return;any=true;
+  var mx=valid(r)?maxN(r.n):0,lim='';
+  if(valid(r)){var rq={};resolve(r.n,mx+1,stockMap(),rq,{},0);lim=Object.values(rq).map(o=>esc(o.n)).join(', ')}
+  var rows='';
+  r.i.forEach(function(g){
+   var q=+g.q||0;if(q<=0||!g.n.trim())return;
+   var pr=find(g.n),isP=valid(pr),hv=have(g.n),av=isP?maxN(g.n):hv;
+   rows+='<tr><td>'+esc(g.n)+(isP?'<span class="tag">część</span>':'')+'</td><td>'+q+'</td><td>'+hv+'</td><td>'+Math.floor(av/q)+' szt.</td></tr>'});
+  var dt='';r.i.forEach(function(g){var pr=find(g.n);if(pr&&pr.t=='p'&&valid(pr))dt+='<div style="margin-top:8px"><b>'+esc(pr.n)+'</b> <span class="mu">(masz gotowych: '+have(pr.n)+')</span><div class="tw"><table><tr><th>Składnik</th><th>Na 1 szt.</th><th>Mam</th></tr>'+pr.i.map(function(x){return '<tr><td>'+esc(x.n)+'</td><td>'+x.q+'</td><td>'+have(x.n)+'</td></tr>'}).join('')+'</table></div></div>'});
+  if(dt)dt='<details style="margin-top:10px"><summary class="mu" style="cursor:pointer">Receptury części</summary>'+dt+'</details>';
+  h+='<div class="card"><div class="hd"><div><b>'+esc(r.n)+'</b><div class="mu">Wystarczy na:</div><div class="big '+(mx>0?'ok':'bad')+'">'+mx+'<small>szt.</small></div>'+
+  (lim?'<div class="mu">'+(mx>0?'Ogranicza: ':'Brakuje: ')+lim+'</div>':'')+'</div>'+
+  '<div class="mu">Chcę zrobić:<br><input type="number" min="0" value="'+(r.w||0)+'" oninput="want('+ri+',this.value)"></div></div>'+
+  '<div id="b'+ri+'" style="margin:10px 0"></div>'+
+  '<div class="tw"><table><tr><th>Składnik</th><th>Na 1 szt.</th><th>Mam</th><th>Starczy na</th></tr>'+rows+'</table></div>'+dt+'</div>'});
+ if(!any)h='<div class="card mu">Brak broni. Dodaj je w zakładce Receptury.</div>';
+ document.getElementById('v0').innerHTML='<div id="tot"></div>'+h;
+ S.recipes.forEach((r,ri)=>{if(r.t!='p')want(ri,r.w||0,1)})}
+function want(ri,v,ns){
+ var r=S.recipes[ri];r.w=Math.max(0,+v||0);
+ var el=document.getElementById('b'+ri);
+ if(el){
+  if(!r.w||!valid(r))el.innerHTML='';
+  else{var rq={},pt={};resolve(r.n,r.w,stockMap(),rq,pt,0);delete pt[key(r.n)];
+   var p=Object.values(pt).map(o=>esc(o.n)+' ×'+o.c).join(', '),m=Object.values(rq).map(o=>esc(o.n)+' '+o.c).join(', ');
+   el.innerHTML='<div class="mu"><b>Plan na '+r.w+' szt. (tylko ta broń)</b></div>'+
+    (p?'<div class="mu">Części do wykonania: '+p+'</div>':'<div class="mu">Części do wykonania: brak</div>')+
+    (m?'<div class="bad">Brakuje surowców: '+m+'</div>':'<div class="ok">Masz wszystko, możesz robić.</div>')}}
+ total();if(!ns)save()}
 
+function total(){var el=document.getElementById('tot');if(!el)return;
+ var st=stockMap(),rq={},pt={},n=0;
+ S.recipes.forEach(function(r){if(r.t!='p'&&(+r.w||0)>0&&valid(r)){n++;resolve(r.n,r.w,st,rq,pt,0);delete pt[key(r.n)]}});
+ if(!n){el.innerHTML='';return}
+ var p=Object.values(pt).map(o=>esc(o.n)+' ×'+o.c).join(', '),m=Object.values(rq).map(o=>esc(o.n)+' '+o.c).join(', ');
+ el.innerHTML='<div class="card"><b>Razem dla wszystkich planowanych broni</b><div class="mu">Wspólny magazyn, żaden materiał nie liczy się podwójnie.</div>'+
+  (p?'<div class="mu" style="margin-top:6px">Części do wykonania: '+p+'</div>':'')+
+  (m?'<div class="bad" style="margin-top:6px">Brakuje surowców: '+m+'</div>':'<div class="ok" style="margin-top:6px">Masz wszystko, możesz robić.</div>')+'</div>'}
+function loadDef(){if(!confirm('Wczytać receptury z gry? Obecne receptury zostaną zastąpione, ilości w magazynie zostają.'))return;
+ S.recipes=JSON.parse(JSON.stringify(SAMPLE.recipes));SAMPLE.mats.forEach(function(m){ensure(m.n)});save();recipes()}
 function stock(){
-var h='<div class="card">';
-S.mats.forEach(function(m,i){
-h+='<div class="row"><input type="text" value="'+esc(m.n)+'" oninput="S.mats['+i+'].n=this.value;save()"><input type="number" min="0" value="'+m.q+'" oninput="S.mats['+i+'].q=Math.max(0,+this.value||0);save()"><button class="x" onclick="S.mats.splice('+i+',1);save();stock()">×</button></div>'});
-if(!S.mats.length)h+='<div class="mu">Magazyn jest pusty.</div>';
-h+='<div class="row"><input type="text" id="nm" placeholder="Nowy materiał"><button class="s p" onclick="addMat()">Dodaj</button></div></div>';
-document.getElementById('v1').innerHTML=h}
-function addMat(){var n=document.getElementById('nm').value;ensure(n);save();stock()}
+ var h='<div class="card">';
+ S.mats.forEach(function(m,i){
+  var p=valid(find(m.n))&&find(m.n).t=='p';
+  h+='<div class="row"><input type="text" value="'+esc(m.n)+'" onchange="ren(S.mats['+i+'].n,this.value);save();stock();dl()">'+(p?'<span class="tag">część</span>':'')+
+  '<input type="number" min="0" value="'+m.q+'" oninput="S.mats['+i+'].q=Math.max(0,+this.value||0);save()"><button class="x" onclick="S.mats.splice('+i+',1);save();stock()">×</button></div>'});
+ if(!S.mats.length)h+='<div class="mu">Magazyn jest pusty.</div>';
+ h+='<div class="row"><input type="text" id="nm" placeholder="Nowy materiał lub część"><button class="s p" onclick="ensure(document.getElementById(\'nm\').value);save();stock()">Dodaj</button></div></div>';
+ document.getElementById('v1').innerHTML=h}
 
+function card(r,ri){
+ var h='<div class="card"><div class="row"><input type="text" value="'+esc(r.n)+'" placeholder="Nazwa" onchange="rn('+ri+',this.value)"><button class="x" onclick="if(confirm(\'Usunąć recepturę?\')){S.recipes.splice('+ri+',1);save();recipes()}">×</button></div>';
+ r.i.forEach(function(g,gi){
+  h+='<div class="row"><input type="text" list="dl" value="'+esc(g.n)+'" placeholder="Materiał lub część" onchange="S.recipes['+ri+'].i['+gi+'].n=this.value;ensure(this.value);save();recipes()"><input type="number" min="0" value="'+g.q+'" oninput="S.recipes['+ri+'].i['+gi+'].q=+this.value||0;save()"><button class="x" onclick="S.recipes['+ri+'].i.splice('+gi+',1);save();recipes()">×</button></div>'});
+ return h+'<button class="s" onclick="S.recipes['+ri+'].i.push({n:\'\',q:1});save();recipes()">+ składnik</button></div>'}
+function rn(ri,v){var r=S.recipes[ri];if(!v.trim())return recipes();if(r.t=='p'){ren(r.n,v);ensure(r.n)}else r.n=v;save();recipes()}
 function recipes(){
-var h='';
-S.recipes.forEach(function(r,ri){
-h+='<div class="card"><div class="row"><input type="text" value="'+esc(r.n)+'" placeholder="Nazwa broni" oninput="S.recipes['+ri+'].n=this.value;save()"><button class="x" title="Usuń broń" onclick="if(confirm(\'Usunąć recepturę?\')){S.recipes.splice('+ri+',1);save();recipes()}">×</button></div>';
-r.i.forEach(function(g,gi){
-h+='<div class="row"><input type="text" list="dl" value="'+esc(g.n)+'" placeholder="Materiał" onchange="S.recipes['+ri+'].i['+gi+'].n=this.value;ensure(this.value);save();recipes()"><input type="number" min="0" value="'+g.q+'" oninput="S.recipes['+ri+'].i['+gi+'].q=+this.value||0;save()"><button class="x" onclick="S.recipes['+ri+'].i.splice('+gi+',1);save();recipes()">×</button></div>'});
-h+='<button class="s" onclick="S.recipes['+ri+'].i.push({n:\'\',q:1});save();recipes()">+ składnik</button></div>'});
-h+='<button class="s p" onclick="S.recipes.push({n:\'Nowa broń\',w:0,i:[]});save();recipes()">+ nowa broń</button> <button class="s" onclick="if(confirm(\'Usunąć wszystko, także magazyn?\')){S={mats:[],recipes:[]};save();recipes()}">Wyczyść wszystko</button>';
-document.getElementById('v2').innerHTML=h;
-document.getElementById('dl').innerHTML=S.mats.map(m=>'<option value="'+esc(m.n)+'">').join('')}
+ var shown={},h='';
+ function sub(r,d){var o='';
+  r.i.forEach(function(g){var pr=find(g.n);
+   if(pr&&pr.t=='p'&&valid(pr)&&!shown[key(pr.n)]&&d<8){shown[key(pr.n)]=1;o+=card(pr,S.recipes.indexOf(pr))+sub(pr,d+1)}});
+  return o}
+ S.recipes.forEach(function(r,ri){if(r.t=='p')return;
+  h+='<h2>'+esc(r.n)+'</h2>'+card(r,ri);
+  var s=sub(r,0);
+  if(s)h+='<div style="margin-left:12px;padding-left:10px;border-left:3px solid var(--bd)"><div class="mu" style="margin-bottom:6px">Części do złożenia: '+esc(r.n)+'</div>'+s+'</div>'});
+ var rest='';
+ S.recipes.forEach(function(r,ri){if(r.t=='p'&&!shown[key(r.n)])rest+=card(r,ri)});
+ if(rest)h+='<h2>Pozostałe części (nie użyte w żadnej broni)</h2>'+rest;
+ h+='<h2>Dodaj</h2><button class="s p" onclick="S.recipes.push({n:\'Nowa broń\',t:\'w\',w:0,i:[]});save();recipes()">+ nowa broń</button> '+
+ '<button class="s p" onclick="S.recipes.push({n:\'Nowa część\',t:\'p\',i:[]});ensure(\'Nowa część\');save();recipes()">+ nowa część</button>'+
+ '<h2>Dane</h2><button class="s" onclick="loadDef()">Wczytaj receptury z gry</button> '+
+ '<button class="s" onclick="if(confirm(\'Usunąć wszystko, także magazyn?\')){S={mats:[],recipes:[]};save();recipes()}">Wyczyść wszystko</button>';
+ document.getElementById('v2').innerHTML=h;
+ dl()}
 tab(0);
 </script>
 </body>
