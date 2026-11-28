@@ -6,80 +6,121 @@
 <title>Kalkulator craftingu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#100b10;--card:rgba(255,255,255,.045);--field:rgba(0,0,0,.38);--tx:#f2ede6;--mu:#a99fa0;--bd:rgba(255,255,255,.11);--bd2:rgba(255,255,255,.06);--ac:#d9a441;--acx:#1a1208;--hi:#e8b95a;--ok:#58d39a;--bad:#ff6b6b;--hov:rgba(255,255,255,.07);--g1:rgba(130,26,48,.5);--g2:rgba(217,164,65,.11);--sh:0 14px 34px -16px rgba(0,0,0,.8);
---disp:'Oswald','Arial Narrow',Impact,sans-serif;--body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+:root{--bg:#0b0c10;--card:rgba(255,255,255,.045);--card2:rgba(255,255,255,.08);--field:rgba(255,255,255,.06);--tx:#f3f4f6;--mu:#9ca3af;--bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.05);--ac:#fbbf24;--acx:#1c1400;--hi:#fbbf24;--ok:#34d399;--bad:#f87171;--hov:rgba(255,255,255,.07);--g1:rgba(251,191,36,.10);--g2:rgba(99,102,241,.13);--sh:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -24px rgba(0,0,0,.9);
+--disp:'Sora',system-ui,sans-serif;--body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eeebee;--card:#fff;--field:#f6f3f6;--tx:#1a1216;--mu:#6a5d63;--bd:rgba(26,18,22,.14);--bd2:rgba(26,18,22,.08);--ac:#d9a441;--acx:#1a1208;--hi:#8a5d0a;--ok:#16794d;--bad:#c0322f;--hov:rgba(26,18,22,.06);--g1:rgba(217,164,65,.22);--g2:rgba(130,26,48,.07);--sh:0 12px 30px -18px rgba(26,18,22,.35);color-scheme:light}}
-:root[data-theme="light"]{--bg:#eeebee;--card:#fff;--field:#f6f3f6;--tx:#1a1216;--mu:#6a5d63;--bd:rgba(26,18,22,.14);--bd2:rgba(26,18,22,.08);--ac:#d9a441;--acx:#1a1208;--hi:#8a5d0a;--ok:#16794d;--bad:#c0322f;--hov:rgba(26,18,22,.06);--g1:rgba(217,164,65,.22);--g2:rgba(130,26,48,.07);--sh:0 12px 30px -18px rgba(26,18,22,.35);color-scheme:light}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3f4f7;--card:#fff;--card2:#eef0f4;--field:#f1f2f6;--tx:#111827;--mu:#6b7280;--bd:rgba(17,24,39,.10);--bd2:rgba(17,24,39,.06);--ac:#f59e0b;--acx:#1c1400;--hi:#b45309;--ok:#059669;--bad:#dc2626;--hov:rgba(17,24,39,.05);--g1:rgba(245,158,11,.14);--g2:rgba(99,102,241,.08);--sh:0 1px 2px rgba(17,24,39,.05),0 16px 36px -26px rgba(17,24,39,.35);color-scheme:light}}
+:root[data-theme="light"]{--bg:#f3f4f7;--card:#fff;--card2:#eef0f4;--field:#f1f2f6;--tx:#111827;--mu:#6b7280;--bd:rgba(17,24,39,.10);--bd2:rgba(17,24,39,.06);--ac:#f59e0b;--acx:#1c1400;--hi:#b45309;--ok:#059669;--bad:#dc2626;--hov:rgba(17,24,39,.05);--g1:rgba(245,158,11,.14);--g2:rgba(99,102,241,.08);--sh:0 1px 2px rgba(17,24,39,.05),0 16px 36px -26px rgba(17,24,39,.35);color-scheme:light}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;min-height:100vh;color:var(--tx);font:16px/1.55 var(--body);background:radial-gradient(900px 520px at 6% -6%,var(--g1),transparent 62%),radial-gradient(800px 520px at 102% 104%,var(--g2),transparent 60%),var(--bg);background-attachment:fixed}
-.tape{padding:38px 0 0}
-.tin,main{max-width:1080px;margin:0 auto;padding-left:16px;padding-right:16px}
-main{padding-bottom:56px}
-h1{margin:0;font:600 clamp(34px,7vw,56px)/1.05 var(--disp);letter-spacing:.01em}
-.sub{margin:8px 0 0;color:var(--mu)}
-h2{font:600 28px/1.15 var(--disp);margin:34px 0 12px;display:flex;align-items:center;gap:14px}
-h2::after{content:"";flex:1;height:1px;background:var(--bd)}
-#v2{max-width:780px}
-nav{display:flex;gap:4px;padding:4px;margin:22px 0 24px;background:var(--card);border:1px solid var(--bd);border-radius:999px;max-width:520px}
-nav button{flex:1;padding:10px 12px;border:0;border-radius:999px;background:transparent;color:var(--mu);font:600 15px/1.2 var(--body);cursor:pointer;transition:background .15s,color .15s}
+body{margin:0;min-height:100vh;color:var(--tx);font:15.5px/1.55 var(--body);background:radial-gradient(900px 480px at 8% -8%,var(--g1),transparent 62%),radial-gradient(800px 520px at 100% 0%,var(--g2),transparent 60%),var(--bg);background-attachment:fixed}
+.top{padding:20px 0 4px}
+.tin{max-width:1120px;margin:0 auto;padding:0 18px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px}
+main{max-width:1120px;margin:0 auto;padding:18px 18px 72px}
+h1{order:1;margin:0 auto 0 0;font:700 19px/1 var(--disp);letter-spacing:-.01em;display:flex;align-items:center;gap:11px}
+h1::before{content:"";width:11px;height:11px;border-radius:3px;background:var(--ac);transform:rotate(45deg)}
+nav{order:2;display:flex;gap:2px;padding:4px;background:var(--card);border:1px solid var(--bd);border-radius:14px}
+nav button{padding:9px 15px;border:0;border-radius:10px;background:transparent;color:var(--mu);font:600 14px/1 var(--body);cursor:pointer;transition:background .15s,color .15s}
 nav button:hover{color:var(--tx)}
 nav button.on{background:var(--ac);color:var(--acx)}
+.hdr-act{order:3;display:flex;align-items:center;gap:8px}
+.chip{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid var(--bd);border-radius:999px;background:var(--card);color:var(--tx);font:500 13px/1 var(--body);cursor:pointer}
+.chip:hover{background:var(--hov)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mu);display:inline-block;margin-right:9px;font-style:normal}
+.dot.on{background:var(--ok);box-shadow:0 0 0 4px rgba(52,211,153,.18)}.dot.err{background:var(--bad)}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:var(--sh);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-#v0{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px;align-items:start}
+h2{font:700 20px/1.2 var(--disp);margin:34px 0 12px;display:flex;align-items:center;gap:14px;letter-spacing:-.01em}
+h2::after{content:"";flex:1;height:1px;background:var(--bd)}
+h3{font:700 16px/1.2 var(--disp);margin:28px 0 10px;display:flex;align-items:baseline;gap:12px;letter-spacing:-.01em}
+h3 .mu{font:500 13px/1 var(--body)}
+#v2{max-width:780px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--sh);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.card>b{font:700 17px/1.2 var(--disp);display:block;margin-bottom:4px}
+.card.go{border-color:rgba(251,191,36,.38)}
+.card.hint,#tot .card{border-color:var(--ac)}
+#v0{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start}
 #v0 .card{margin:0}
-#tot{grid-column:1/-1}#tot:empty{display:none}
-#tot .card{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac),0 18px 44px -18px rgba(217,164,65,.45)}
-.card>b{font:600 24px/1.15 var(--disp);display:block;margin-bottom:4px}
-.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--bd)}
-.hd>div:first-child>b{font:600 26px/1.1 var(--disp);display:block;margin-bottom:8px}
+#v0>.top2,#v0>.note,#tot{grid-column:1/-1}.top2:empty{display:none}.top2{display:grid;gap:12px}#tot:empty{display:none}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.tile{display:flex;flex-direction:column;gap:2px;padding:16px 20px;background:var(--card);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh)}
+.tile b{font:800 30px/1.1 var(--disp);color:var(--hi);letter-spacing:-.02em}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--bd)}
+.hd>div:first-child>b{font:700 18px/1.2 var(--disp);display:block;margin-bottom:8px;letter-spacing:-.01em}
 .hd>div:last-child{text-align:right}
-.big{font:600 78px/.95 var(--disp);margin:2px 0 8px}
-.big small{font:600 16px/1 var(--body);color:var(--mu);margin-left:8px}
+.pill{display:inline-block;margin-bottom:14px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.go{background:rgba(52,211,153,.14);color:var(--ok)}.pill.no{background:rgba(248,113,113,.14);color:var(--bad)}
+.big{font:800 60px/1 var(--disp);letter-spacing:-.03em;margin:2px 0 8px}
+.big small{font:500 15px/1 var(--body);letter-spacing:0;color:var(--mu);margin-left:8px}
 .big.ok{color:var(--hi)}.big.bad{color:var(--bad)}
 .mu{color:var(--mu);font-size:14px}
 .ok{color:var(--ok)}.bad{color:var(--bad)}
-#v0 [id^="b"]:not(:empty){background:rgba(217,164,65,.09);border-radius:12px;padding:10px 14px}
-input{font:inherit;color:var(--tx);background:var(--field);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;min-width:0}
+.plan:not(:empty){background:rgba(251,191,36,.08);border-radius:14px;padding:12px 14px;margin:14px 0;font-size:14.5px}
+.plan2{margin-top:8px;font-size:14.5px}
+input{font:inherit;color:var(--tx);background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;min-width:0}
 input[type=number]{width:92px;text-align:right;font-variant-numeric:tabular-nums}
-button.s{font:600 15px/1.2 var(--body);padding:10px 16px;border-radius:10px;border:1px solid var(--bd);background:transparent;color:var(--tx);cursor:pointer;transition:background .15s}
+button.s{font:600 14px/1.2 var(--body);padding:10px 16px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;transition:background .15s}
 button.s:hover{background:var(--hov)}
 button.s.p{background:var(--ac);color:var(--acx);border-color:var(--ac)}
-button.s.p:hover{filter:brightness(1.08)}
-button.x{border:0;background:none;color:var(--bad);font-size:22px;line-height:1;padding:4px 10px;cursor:pointer;border-radius:8px}
-button.x:hover{background:var(--hov)}
-.row{display:flex;gap:8px;align-items:center;margin:7px 0}
-.row input[type=text]{flex:1}
-#v1 .card{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));column-gap:26px}
-.tag{font-size:12px;font-weight:600;color:var(--hi);background:rgba(217,164,65,.14);border-radius:999px;padding:1px 9px;margin-left:8px}
-.tw{overflow-x:auto;margin-top:10px}
-table{width:100%;border-collapse:collapse;font-size:15px}
-td,th{padding:8px 8px;text-align:left;border-bottom:1px solid var(--bd2);font-variant-numeric:tabular-nums}
-th{color:var(--mu);font-weight:600;font-size:13px}
+button.s.p:hover{filter:brightness(1.07)}
+button.x{border:0;background:none;color:var(--mu);font-size:22px;line-height:1;padding:4px 10px;cursor:pointer;border-radius:8px}
+button.x:hover{background:var(--hov);color:var(--bad)}
+.row{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.row input[type=text],.row input[type=search]{flex:1}
+.fbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.fbtn{padding:6px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--mu);font:600 12.5px/1.2 var(--body);cursor:pointer}
+.fbtn:hover{color:var(--tx)}
+.fbtn.on{background:var(--card2);color:var(--hi);border-color:var(--ac)}
+.step{display:inline-flex;align-items:center;gap:6px}
+.step input{width:76px;text-align:center}
+.step button.s{padding:8px 13px;font-size:17px;line-height:1}
+.tag{font-size:11.5px;font-weight:600;color:var(--hi);background:rgba(251,191,36,.13);border-radius:999px;padding:1px 9px;margin-left:8px}
+.tw{overflow-x:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+td,th{padding:9px 8px;text-align:left;border-bottom:1px solid var(--bd2);font-variant-numeric:tabular-nums}
+th{color:var(--mu);font-weight:500;font-size:12.5px}
 td:nth-child(n+2),th:nth-child(n+2){text-align:right;white-space:nowrap}
-summary{cursor:pointer;padding:4px 0}
-@media (max-width:560px){.big{font-size:64px}.hd{flex-wrap:wrap}.hd>div:last-child{text-align:left}#v0{grid-template-columns:1fr}}
+tr.lim td{background:rgba(251,191,36,.09)}tr.lim td:last-child{color:var(--hi);font-weight:700}
+tr:last-child td{border-bottom:0}
+.note{padding:4px 4px 0;font-size:13px}
+.bar input{width:100%;box-sizing:border-box;padding:13px 18px;border-radius:999px}
+#v1 .card.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));column-gap:28px;padding:10px 20px}
+#v1 .card.io{display:block}
+.it .nm{background:transparent;border-color:transparent;padding-left:6px}
+.it .nm:hover,.it .nm:focus{border-color:var(--bd);background:var(--field)}
+textarea{width:100%;box-sizing:border-box;min-height:160px;margin:10px 0;font:inherit;color:var(--tx);background:var(--field);border:1px solid var(--bd);border-radius:14px;padding:12px 14px;resize:vertical}
+ul.log{list-style:none;margin:0;padding:0}
+ul.log li{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--bd2);font-size:14.5px}
+ul.log li:last-child{border-bottom:0}
+@media (max-width:640px){h1{order:1}.hdr-act{order:2}nav{order:3;flex-basis:100%;overflow-x:auto}nav button{flex:1;white-space:nowrap}.big{font-size:52px}.hd{flex-wrap:wrap}.hd>div:last-child{text-align:left}#v0{grid-template-columns:1fr}}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 </head>
 <body>
-<header class="tape"><div class="tin"><h1>Kalkulator craftingu</h1><p class="sub">Receptury, magazyn i plan produkcji.</p></div></header>
+<header class="top"><div class="tin"><h1>Kalkulator craftingu</h1>
+<nav><button id="t0" onclick="tab(0)">Ile zrobisz</button><button id="t1" onclick="tab(1)">Magazyn</button><button id="t2" onclick="tab(2)">Receptury</button><button id="t3" onclick="tab(3)">Ekipa</button></nav>
+<div class="hdr-act"><button id="tbtn" class="chip" title="Zmień motyw" onclick="toggleTheme()">Motyw</button><button id="chip" class="chip" onclick="tab(3)"></button></div></div></header>
 <main>
-<nav>
-<button id="t0" onclick="tab(0)">Podsumowanie</button>
-<button id="t1" onclick="tab(1)">Magazyn</button>
-<button id="t2" onclick="tab(2)">Receptury</button>
-</nav>
 <section id="v0"></section>
 <section id="v1" hidden></section>
 <section id="v2" hidden></section>
+<section id="v3" hidden></section>
 <datalist id="dl"></datalist>
 </main>
 <script>
+// === FIREBASE: skonfigurowane pod Twój projekt ===
+var FBCFG={
+  apiKey:"AIzaSyCVCLohCmVJyDYos5FPLtfpqQV3dD1JBGc",
+  authDomain:"kalkulator-d7f73.firebaseapp.com",
+  databaseURL:"https://kalkulator-d7f73-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"kalkulator-d7f73",
+  storageBucket:"kalkulator-d7f73.firebasestorage.app",
+  messagingSenderId:"524927265503",
+  appId:"1:524927265503:web:a33b018b665900e848176a"
+};
 var K='craftcalc1';
-var SV=2;var VAR={'CUSTOM':['Żelazny gwóźdź','Wygięta żelazna rurka','Metalowa rynna'],'CERAMIK':['Żelazny gwóźdź','Blok silnika','Metalowy kawałek ramy'],'COMBAT':['Śmieć elektroniczny','Śruba','Metalowy kawałek szyny'],'SNS MK2':['Kawałek gumowej podkładki','Kawałek blachy','Metalowa rura'],'VF 1922':['Stare ogrodzenie','Kawałek starej rzeźby','Kawałek metalowej pokrywki',1]};
+var SV=3;var PESO='Peso meksykańskie',BP=20000;var VAR={'CUSTOM':['Żelazny gwóźdź','Wygięta żelazna rurka','Metalowa rynna'],'CERAMIK':['Żelazny gwóźdź','Blok silnika','Metalowy kawałek ramy'],'COMBAT':['Śmieć elektroniczny','Śruba','Metalowy kawałek szyny'],'SNS MK2':['Kawałek gumowej podkładki','Kawałek blachy','Metalowa rura'],'VF 1922':['Stare ogrodzenie','Kawałek starej rzeźby','Kawałek metalowej pokrywki',1]};
 var WN={'VF 1922':'Vintek VF 1922'};
 var SAMPLE=build();
 function build(){var rec=[],names={};
@@ -87,12 +128,30 @@ function build(){var rec=[],names={};
   rec.push({n:'Klamka '+(WN[v]||v),t:'w',w:0,i:[{n:mag,q:1},{n:kor,q:1},{n:luf,q:1},{n:'Blueprint '+v,q:1},{n:'Sprężynka',q:2}]});
   rec.push({n:mag,t:'p',i:[{n:'Magazynek',q:1},{n:'Uszkodzone nadkole',q:4},{n:o[0],q:6},{n:'Gumowa uszczelka',q:4},{n:'Część metalowa',q:2}]});
   rec.push({n:kor,t:'p',i:[{n:'Korpus SNS',q:4},{n:'Kawałek stopu metalu',q:3},{n:o[1],q:5},{n:'Kawałek opony',q:2},{n:'Gumowa podkładka',q:2}]});
-  rec.push({n:luf,t:'p',i:[{n:'Lufa SNS',q:3},{n:o[2],q:o[3]||2},{n:'Wał od silnika',q:5},{n:'Drzwiczki do sejfu',q:1},{n:'Zardzewiała blacha',q:3}]})});
+  rec.push({n:luf,t:'p',i:[{n:'Lufa SNS',q:3},{n:o[2],q:o[3]||2},{n:'Wał od silnika',q:5},{n:'Drzwiczki do sejfu',q:1},{n:'Zardzewiała blacha',q:3}]});
+  rec.push({n:'Blueprint '+v,t:'p',b:1,i:[{n:PESO,q:BP}]})});
  rec.forEach(function(r){if(r.t=='p')names[key(r.n)]=r.n;r.i.forEach(function(g){names[key(g.n)]=g.n})});
  var mats=Object.keys(names).map(function(k){return names[k]}).sort(function(a,b){return a.localeCompare(b,'pl')}).map(function(n){return {n:n,q:0}});
  return {v:SV,mats:mats,recipes:rec}}
+
+function initTheme(){
+ var th=ls('crafttheme');
+ if(th==='light'||th==='dark')document.documentElement.setAttribute('data-theme',th);
+ updateThemeBtn()}
+function toggleTheme(){
+ var curTh=document.documentElement.getAttribute('data-theme');
+ if(!curTh)curTh=window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark';
+ var next=curTh==='dark'?'light':'dark';
+ document.documentElement.setAttribute('data-theme',next);
+ ls('crafttheme',next);
+ updateThemeBtn()}
+function updateThemeBtn(){
+ var b=document.getElementById('tbtn');if(!b)return;
+ var curTh=document.documentElement.getAttribute('data-theme')||(window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark');
+ b.textContent=curTh==='dark'?'Jasny':'Ciemny'}
+
 var S=load();
-function load(){try{var r=localStorage.getItem(K);if(r){var d=JSON.parse(r);if(!d.recipes.some(function(x){return x.n=='Karabin (przykład)'}))return sync(d)}}catch(e){}return JSON.parse(JSON.stringify(SAMPLE))}
+function load(){try{var r=localStorage.getItem(K);if(r){var d=JSON.parse(r);if(d&&Array.isArray(d.mats)&&Array.isArray(d.recipes)&&!d.recipes.some(function(x){return x.n=='Karabin (przykład)'}))return sync(d)}}catch(e){}return JSON.parse(JSON.stringify(SAMPLE))}
 function sync(d){if(d.v===SV)return d;
  SAMPLE.recipes.forEach(function(r){if(!d.recipes.some(function(x){return key(x.n)==key(r.n)}))d.recipes.push(JSON.parse(JSON.stringify(r)))});
  SAMPLE.mats.forEach(function(m){if(!d.mats.some(function(x){return key(x.n)==key(m.n)}))d.mats.push({n:m.n,q:0})});
@@ -126,63 +185,116 @@ function ren(old,nw){nw=nw.trim();if(!nw)return;var k=key(old);
  S.mats.forEach(m=>{if(key(m.n)==k)m.n=nw});
  S.recipes.forEach(r=>{if(r.t=='p'&&key(r.n)==k)r.n=nw;r.i.forEach(g=>{if(key(g.n)==k)g.n=nw})})}
 function dl(){document.getElementById('dl').innerHTML=S.mats.map(m=>'<option value="'+esc(m.n)+'">').join('')}
-function tab(i){for(var k=0;k<3;k++){document.getElementById('v'+k).hidden=k!=i;document.getElementById('t'+k).className=k==i?'on':''}
- S.recipes.forEach(r=>{if(r.t=='p')ensure(r.n)});
- [sum,stock,recipes][i]();dl()}
+function tab(i){cur=i;for(var k=0;k<4;k++){document.getElementById('v'+k).hidden=k!=i;document.getElementById('t'+k).className=k==i?'on':''}
+ S.recipes.forEach(function(r){if(r.t=='p')ensure(r.n)});
+ [sum,stock,recipes,crew][i]();dl()}
 
+function f(n){return Number(n).toLocaleString('pl-PL')}
+function price(){var r=S.recipes.find(function(x){return x.b&&valid(x)});return r?(+r.i[0].q||0):0}
+function catOf(n){var k=key(n),r=find(n);if(k==key(PESO))return 0;if(r&&r.b)return 1;if(r&&r.t=='p'&&valid(r))return 2;return 3}
+
+function planData(){
+ var st=stockMap(),rq={},pt={},n=0;
+ S.recipes.forEach(function(r){if(r.t!='p'&&(+r.w||0)>0&&valid(r)){n++;resolve(r.n,r.w,st,rq,pt,0);delete pt[key(r.n)]}});
+ return {n:n,st:st,rq:rq,pt:pt}}
+
+function consumePlan(){
+ var p=planData();
+ if(!p.n||Object.keys(p.rq).length)return;
+ if(!confirm('Odjąć zużyte surowce i peso z magazynu zgodnie z tym planem?'))return;
+ var before=stockMap();
+ S.mats.forEach(function(m){var k=key(m.n);if(p.st[k]!==undefined)m.q=Math.max(0,p.st[k])});
+ save();
+ S.mats.forEach(function(m){var k=key(m.n),oldQ=before[k]||0,newQ=+m.q||0;
+  if(oldQ!==newQ&&SY.ref){var fkKey=fk(m.n);SY.last[fkKey]=newQ;SY.ref.child('stock/'+fkKey).set({n:m.n,q:newQ});logc(m.n,oldQ,newQ)}});
+ S.recipes.forEach(function(r){if(r.t!='p')r.w=0});
+ save();sum()}
+
+function planHtml(pt,rq,canConsume){
+ var buy=[],mk=[],miss=[];
+ Object.values(pt).forEach(function(o){var r=find(o.n);if(r&&r.b)buy.push(esc(o.n)+' ×'+o.c+' ('+f(o.c*(+r.i[0].q||0))+' peso)');else mk.push(esc(o.n)+' ×'+o.c)});
+ Object.values(rq).forEach(function(o){miss.push(esc(o.n)+' '+f(o.c))});
+ var h='';
+ if(mk.length)h+='<div><span class="mu">Do zrobienia:</span> '+mk.join(', ')+'</div>';
+ if(buy.length)h+='<div><span class="mu">Do kupienia:</span> '+buy.join(', ')+'</div>';
+ if(miss.length)h+='<div class="bad">Brakuje: '+miss.join(', ')+'</div>';
+ else{h+='<div class="ok">Masz wszystko, możesz robić.</div>';
+  if(canConsume)h+='<div class="row" style="margin-top:10px"><button class="s p" onclick="consumePlan()">Odejmij zużyte zasoby z magazynu</button></div>'}
+ return h}
 function sum(){
- var h='',any=false;
+ var h='',any=false,pq=have(PESO),pr=price(),empty=!S.mats.some(function(m){return (+m.q||0)>0}),strip='';
+ if(empty)strip+='<div class="card hint"><b>Zacznij od magazynu</b><div class="mu">Wpisz, ile czego masz, a tutaj od razu zobaczysz, ile klamek i części możesz zrobić.</div><div class="row"><button class="s p" onclick="tab(1)">Przejdź do magazynu</button></div></div>';
+ if(pr)strip+='<div class="strip"><div class="tile"><span class="mu">Peso meksykańskie</span><b>'+f(pq)+'</b></div><div class="tile"><span class="mu">Blueprinty do kupienia</span><b>'+Math.floor(pq/pr)+'</b><span class="mu">po '+f(pr)+' peso, wspólne dla wszystkich klamek</span></div></div>';
  S.recipes.forEach(function(r,ri){
   if(r.t=='p')return;any=true;
-  var mx=valid(r)?maxN(r.n):0,lim='';
-  if(valid(r)){var rq={};resolve(r.n,mx+1,stockMap(),rq,{},0);lim=Object.values(rq).map(o=>esc(o.n)).join(', ')}
-  var rows='';
-  r.i.forEach(function(g){
-   var q=+g.q||0;if(q<=0||!g.n.trim())return;
-   var pr=find(g.n),isP=valid(pr),hv=have(g.n),av=isP?maxN(g.n):hv;
-   rows+='<tr><td>'+esc(g.n)+(isP?'<span class="tag">część</span>':'')+'</td><td>'+q+'</td><td>'+hv+'</td><td>'+Math.floor(av/q)+' szt.</td></tr>'});
-  var dt='';r.i.forEach(function(g){var pr=find(g.n);if(pr&&pr.t=='p'&&valid(pr))dt+='<div style="margin-top:8px"><b>'+esc(pr.n)+'</b> <span class="mu">(masz gotowych: '+have(pr.n)+')</span><div class="tw"><table><tr><th>Składnik</th><th>Na 1 szt.</th><th>Mam</th></tr>'+pr.i.map(function(x){return '<tr><td>'+esc(x.n)+'</td><td>'+x.q+'</td><td>'+have(x.n)+'</td></tr>'}).join('')+'</table></div></div>'});
-  if(dt)dt='<details style="margin-top:10px"><summary class="mu" style="cursor:pointer">Receptury części</summary>'+dt+'</details>';
-  h+='<div class="card"><div class="hd"><div><b>'+esc(r.n)+'</b><div class="mu">Wystarczy na:</div><div class="big '+(mx>0?'ok':'bad')+'">'+mx+'<small>szt.</small></div>'+
-  (lim?'<div class="mu">'+(mx>0?'Ogranicza: ':'Brakuje: ')+lim+'</div>':'')+'</div>'+
-  '<div class="mu">Chcę zrobić:<br><input type="number" min="0" value="'+(r.w||0)+'" oninput="want('+ri+',this.value)"></div></div>'+
-  '<div id="b'+ri+'" style="margin:10px 0"></div>'+
-  '<div class="tw"><table><tr><th>Składnik</th><th>Na 1 szt.</th><th>Mam</th><th>Starczy na</th></tr>'+rows+'</table></div>'+dt+'</div>'});
+  var ok=valid(r),mx=ok?maxN(r.n):0,lim='';
+  if(ok){var rq={};resolve(r.n,mx+1,stockMap(),rq,{},0);lim=Object.values(rq).map(function(o){return esc(o.n)}).join(', ')}
+  var rows=[],mn=Infinity;
+  r.i.forEach(function(g){var q=+g.q||0;if(q<=0||!g.n.trim())return;
+   var p2=find(g.n),isP=valid(p2),rd=have(g.n),tot=isP?maxN(g.n):rd,c=Math.floor(tot/q);
+   if(c<mn)mn=c;
+   rows.push({g:g,q:q,p:p2,isP:isP,rd:rd,ex:isP?tot-rd:0,c:c})});
+  var tb='';
+  rows.forEach(function(o){tb+='<tr'+(o.c==mn?' class="lim"':'')+'><td>'+esc(o.g.n)+(o.isP?'<span class="tag">'+(o.p.b?'blueprint':'część')+'</span>':'')+(o.q>1?'<span class="mu"> ×'+o.q+'</span>':'')+'</td><td>'+f(o.rd)+'</td><td>'+(o.ex>0?'+'+f(o.ex):'–')+'</td><td>'+f(o.c)+'</td></tr>'});
+  h+='<div class="card w '+(mx>0?'go':'no')+'"><div class="hd"><div><b>'+esc(r.n)+'</b><span class="pill '+(mx>0?'go':'no')+'">'+(mx>0?'Można robić':'Brak materiałów')+'</span><div class="mu">Możesz zrobić</div><div class="big '+(mx>0?'ok':'bad')+'">'+f(mx)+'<small>szt.</small></div>'+
+   (lim?'<div class="mu">'+(mx>0?'Ogranicza: ':'Brakuje: ')+lim+'</div>':'')+'</div>'+
+   '<div class="want"><div class="mu">Chcę zrobić</div><div class="step"><button class="s" onclick="bump('+ri+',-1)">−</button><input type="number" min="0" id="w'+ri+'" value="'+(r.w||0)+'" oninput="want('+ri+',this.value)"><button class="s" onclick="bump('+ri+',1)">+</button></div></div></div>'+
+   '<div id="b'+ri+'" class="plan"></div>'+
+   '<div class="tw"><table><tr><th>Składnik</th><th>Masz</th><th>Dorobisz</th><th>Starczy na</th></tr>'+tb+'</table></div></div>'});
  if(!any)h='<div class="card mu">Brak broni. Dodaj je w zakładce Receptury.</div>';
- document.getElementById('v0').innerHTML='<div id="tot"></div>'+h;
- S.recipes.forEach((r,ri)=>{if(r.t!='p')want(ri,r.w||0,1)})}
+ document.getElementById('v0').innerHTML='<div class="top2">'+strip+'</div><div id="tot"></div>'+h+(any?'<div class="note mu">Wiersze w tabelach są liczone osobno. Wynik „Możesz zrobić” uwzględnia, że klamki i części korzystają z tych samych materiałów. „Dorobisz” to ile części zrobisz jeszcze z surowców (blueprinty: kupisz za peso).</div>':'');
+ S.recipes.forEach(function(r,ri){if(r.t!='p')want(ri,r.w||0,1)})}
+function bump(ri,d){var el=document.getElementById('w'+ri);el.value=Math.max(0,(+el.value||0)+d);want(ri,el.value)}
 function want(ri,v,ns){
  var r=S.recipes[ri];r.w=Math.max(0,+v||0);
  var el=document.getElementById('b'+ri);
- if(el){
-  if(!r.w||!valid(r))el.innerHTML='';
+ if(el){if(!r.w||!valid(r))el.innerHTML='';
   else{var rq={},pt={};resolve(r.n,r.w,stockMap(),rq,pt,0);delete pt[key(r.n)];
-   var p=Object.values(pt).map(o=>esc(o.n)+' ×'+o.c).join(', '),m=Object.values(rq).map(o=>esc(o.n)+' '+o.c).join(', ');
-   el.innerHTML='<div class="mu"><b>Plan na '+r.w+' szt. (tylko ta broń)</b></div>'+
-    (p?'<div class="mu">Części do wykonania: '+p+'</div>':'<div class="mu">Części do wykonania: brak</div>')+
-    (m?'<div class="bad">Brakuje surowców: '+m+'</div>':'<div class="ok">Masz wszystko, możesz robić.</div>')}}
+   el.innerHTML='<div class="mu"><b>Plan na '+r.w+' szt. (tylko ta broń)</b></div>'+planHtml(pt,rq,false)}}
  total();if(!ns)save()}
-
 function total(){var el=document.getElementById('tot');if(!el)return;
- var st=stockMap(),rq={},pt={},n=0;
- S.recipes.forEach(function(r){if(r.t!='p'&&(+r.w||0)>0&&valid(r)){n++;resolve(r.n,r.w,st,rq,pt,0);delete pt[key(r.n)]}});
- if(!n){el.innerHTML='';return}
- var p=Object.values(pt).map(o=>esc(o.n)+' ×'+o.c).join(', '),m=Object.values(rq).map(o=>esc(o.n)+' '+o.c).join(', ');
- el.innerHTML='<div class="card"><b>Razem dla wszystkich planowanych broni</b><div class="mu">Wspólny magazyn, żaden materiał nie liczy się podwójnie.</div>'+
-  (p?'<div class="mu" style="margin-top:6px">Części do wykonania: '+p+'</div>':'')+
-  (m?'<div class="bad" style="margin-top:6px">Brakuje surowców: '+m+'</div>':'<div class="ok" style="margin-top:6px">Masz wszystko, możesz robić.</div>')+'</div>'}
+ var p=planData();
+ if(!p.n){el.innerHTML='';return}
+ el.innerHTML='<div class="card"><b>Razem dla wszystkich planowanych broni</b><div class="mu">Wspólny magazyn i wspólne peso, nic nie liczy się podwójnie.</div><div class="plan2">'+planHtml(p.pt,p.rq,true)+'</div></div>'}
 function loadDef(){if(!confirm('Wczytać receptury z gry? Obecne receptury zostaną zastąpione, ilości w magazynie zostają.'))return;
  S.recipes=JSON.parse(JSON.stringify(SAMPLE.recipes));SAMPLE.mats.forEach(function(m){ensure(m.n)});save();recipes()}
-function stock(){
- var h='<div class="card">';
- S.mats.forEach(function(m,i){
-  var p=valid(find(m.n))&&find(m.n).t=='p';
-  h+='<div class="row"><input type="text" value="'+esc(m.n)+'" onchange="ren(S.mats['+i+'].n,this.value);save();stock();dl()">'+(p?'<span class="tag">część</span>':'')+
-  '<input type="number" min="0" value="'+m.q+'" oninput="S.mats['+i+'].q=Math.max(0,+this.value||0);save()"><button class="x" onclick="S.mats.splice('+i+',1);save();stock()">×</button></div>'});
- if(!S.mats.length)h+='<div class="mu">Magazyn jest pusty.</div>';
- h+='<div class="row"><input type="text" id="nm" placeholder="Nowy materiał lub część"><button class="s p" onclick="ensure(document.getElementById(\'nm\').value);save();stock()">Dodaj</button></div></div>';
- document.getElementById('v1').innerHTML=h}
 
+var fltMode='all';
+function setFlt(m){fltMode=m;document.querySelectorAll('.fbtn').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-f')===m)});applyFlt()}
+function applyFlt(){
+ var inp=document.getElementById('srch'),k=key(inp?inp.value:'');
+ var p=planData(),missSet={};
+ Object.keys(p.rq).forEach(function(rk){missSet[rk]=1});
+ document.querySelectorAll('#v1 [data-n]').forEach(function(e){
+  var n=e.getAttribute('data-n'),kn=key(n),q=+e.getAttribute('data-q')||0;
+  var matchTxt=!k||kn.indexOf(k)>-1;
+  var matchMode=fltMode==='all'||(fltMode==='pos'&&q>0)||(fltMode==='miss'&&!!missSet[kn]);
+  e.style.display=(matchTxt&&matchMode)?'':'none'})}
+
+function stock(){
+ var cats=[[],[],[],[]],names=['Waluta','Blueprinty','Gotowe części','Surowce'];
+ S.mats.forEach(function(m,i){cats[catOf(m.n)].push(i)});
+ var h='<div class="bar"><input type="search" id="srch" placeholder="Szukaj w magazynie…" oninput="applyFlt()"><div class="fbar"><button class="fbtn '+(fltMode==='all'?'on':'')+'" data-f="all" onclick="setFlt(\'all\')">Wszystkie</button><button class="fbtn '+(fltMode==='pos'?'on':'')+'" data-f="pos" onclick="setFlt(\'pos\')">Mam &gt; 0</button><button class="fbtn '+(fltMode==='miss'?'on':'')+'" data-f="miss" onclick="setFlt(\'miss\')">Brakuje do planu</button></div></div>';
+ cats.forEach(function(ix,c){if(!ix.length)return;
+  h+='<h3>'+names[c]+(c==0&&price()?'<span class="mu">1 blueprint = '+f(price())+' peso</span>':'')+'</h3><div class="card list">';
+  ix.forEach(function(i){var m=S.mats[i],st=c==0?10000:1;
+   h+='<div class="row it" data-n="'+esc(m.n)+'" data-q="'+(+m.q||0)+'"><input type="text" class="nm" value="'+esc(m.n)+'"'+(SY.ref?' readonly':'')+' onchange="renByKey(\''+esc(key(m.n))+'\',this.value);save();stock();dl()"><div class="step"><button class="s" onclick="adj('+i+',-'+st+')">−</button><input type="number" min="0" id="q'+i+'" value="'+m.q+'" oninput="qset('+i+',Math.max(0,+this.value||0))"><button class="s" onclick="adj('+i+','+st+')">+</button></div><button class="x" title="Usuń" onclick="delMat('+i+')">×</button></div>'});
+  h+='</div>'});
+ if(!S.mats.length)h+='<div class="card mu">Magazyn jest pusty.</div>';
+ h+='<h3>Dodaj pozycję</h3><div class="card"><div class="row"><input type="text" id="nm" placeholder="Nazwa materiału lub części"><button class="s p" onclick="addMat(document.getElementById(\'nm\').value)">Dodaj</button></div></div>';
+ h+='<h3>Kopiuj i wklej magazyn</h3><div class="card io"><div class="mu">Skopiuj stan magazynu jako tekst, a po zmianach wklej go z powrotem. Format: jedna linia na pozycję, np. Żelazo: 20</div><textarea id="io" placeholder="Żelazo: 20&#10;Stal: 5"></textarea><div class="row"><button class="s p" onclick="exp()">Skopiuj magazyn</button><button class="s" onclick="imp()">Wczytaj z pola</button></div><div class="mu" id="iomsg"></div></div>';
+ document.getElementById('v1').innerHTML=h;
+ applyFlt()}
+function renByKey(k,nw){var m=S.mats.find(function(x){return key(x.n)===k});if(m)ren(m.n,nw)}
+function exp(){var t=S.mats.map(function(m){return m.n+': '+(+m.q||0)}).join('\n'),el=document.getElementById('io'),ms=document.getElementById('iomsg');
+ el.value=t;el.select();
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){ms.textContent='Skopiowano do schowka ('+S.mats.length+' pozycji).'},function(){ms.textContent='Tekst zaznaczony, skopiuj go ręcznie (Ctrl+C).'});
+ else ms.textContent='Tekst zaznaczony, skopiuj go ręcznie (Ctrl+C).'}
+function imp(){var el=document.getElementById('io'),n=0;
+ el.value.split(/\r?\n/).forEach(function(l){var m=l.match(/^\s*(.+?)\s*[:=]\s*(\d+)\s*$/);if(!m)return;
+  ensure(m[1]);S.mats.forEach(function(x){if(key(x.n)==key(m[1]))x.q=+m[2]});n++});
+ if(!n){document.getElementById('iomsg').textContent='Nie rozpoznano żadnych linii. Format: Nazwa: ilość';return}
+ save();syncAll();stock();document.getElementById('iomsg').textContent='Wczytano '+n+' pozycji.'}
 function card(r,ri){
  var h='<div class="card"><div class="row"><input type="text" value="'+esc(r.n)+'" placeholder="Nazwa" onchange="rn('+ri+',this.value)"><button class="x" onclick="if(confirm(\'Usunąć recepturę?\')){S.recipes.splice('+ri+',1);save();recipes()}">×</button></div>';
  r.i.forEach(function(g,gi){
@@ -205,10 +317,94 @@ function recipes(){
  h+='<h2>Dodaj</h2><button class="s p" onclick="S.recipes.push({n:\'Nowa broń\',t:\'w\',w:0,i:[]});save();recipes()">+ nowa broń</button> '+
  '<button class="s p" onclick="S.recipes.push({n:\'Nowa część\',t:\'p\',i:[]});ensure(\'Nowa część\');save();recipes()">+ nowa część</button>'+
  '<h2>Dane</h2><button class="s" onclick="loadDef()">Wczytaj receptury z gry</button> '+
- '<button class="s" onclick="if(confirm(\'Usunąć wszystko, także magazyn?\')){S={mats:[],recipes:[]};save();recipes()}">Wyczyść wszystko</button>';
+ '<button class="s" onclick="if(confirm(\'Usunąć wszystko, także magazyn?\')){S={v:SV,mats:[],recipes:[]};save();recipes()}">Wyczyść wszystko</button>';
  document.getElementById('v2').innerHTML=h;
  dl()}
-tab(0);
+var cur=0;
+var SY={db:null,ref:null,lq:null,room:'',nick:'',last:{},pend:{},tm:{},log:[],conn:false,seeded:false,cb:false};
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k)||'';if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return ''}
+function fk(n){return encodeURIComponent(key(n)).replace(/\./g,'%2E')}
+function isUsed(n){var k=key(n);return S.recipes.some(function(r){return key(r.n)==k||r.i.some(function(g){return key(g.n)==k})})}
+function chip(){var e=document.getElementById('chip');if(!e)return;var c='',t;
+ if(!window.firebase||!FBCFG.databaseURL)t='Tryb lokalny';else if(!SY.ref)t='Bez ekipy';else if(SY.conn){c='on';t='Ekipa: '+esc(SY.room)}else{c='err';t='Łączenie…'}
+ e.innerHTML='<i class="dot '+c+'"></i>'+t}
+function initSync(){
+ chip();
+ if(!window.firebase||!FBCFG.databaseURL)return;
+ try{if(!firebase.apps.length)firebase.initializeApp(FBCFG);SY.db=firebase.database()}catch(e){return}
+ var u='';try{u=new URLSearchParams(location.search).get('room')||''}catch(e){}
+ SY.nick=ls('craftnick');
+ var r=(u||ls('craftroom')).toLowerCase();
+ if(/^[a-z0-9_-]{6,40}$/.test(r)){
+  if(u&&!SY.nick){var n='';try{n=prompt('Jak masz na imię? (pokaże się w historii zmian)')||''}catch(e){}SY.nick=n.trim()||'Gracz';ls('craftnick',SY.nick)}
+  join(r)}}
+function join(r){
+ leaveRef();
+ SY.room=r;ls('craftroom',r);SY.ref=SY.db.ref('rooms/'+r);SY.seeded=false;SY.last={};SY.pend={};SY.log=[];
+ SY.ref.child('stock').on('value',onStock,function(){SY.conn=false;chip()});
+ SY.lq=SY.ref.child('log').limitToLast(20);SY.lq.on('value',onLog);
+ if(!SY.cb){SY.cb=true;SY.db.ref('.info/connected').on('value',function(s){SY.conn=!!s.val();chip();var m=document.getElementById('cmsg');if(m)m.textContent=statusText()})}
+ chip()}
+function leaveRef(){if(SY.ref){SY.ref.child('stock').off();if(SY.lq)SY.lq.off()}}
+function leave(){leaveRef();SY.ref=null;SY.lq=null;SY.room='';SY.seeded=false;ls('craftroom',null);chip();crew()}
+function onStock(snap){
+ var v=snap.val()||{},ks=Object.keys(v);
+ if(!SY.seeded){SY.seeded=true;
+  if(!ks.length){var up={},c=0;S.mats.forEach(function(m){if((+m.q||0)>0){up[fk(m.n)]={n:m.n,q:+m.q};SY.last[fk(m.n)]=+m.q;c++}});if(c)SY.ref.child('stock').update(up);return}}
+ SY.last={};var seen={};
+ ks.forEach(function(k){var it=v[k]||{},nm=it.n||k,q=Math.max(0,+it.q||0);seen[k]=1;SY.last[k]=q;
+  if(SY.pend[k])return;
+  var m=S.mats.find(function(x){return key(x.n)==key(nm)});if(m)m.q=q;else S.mats.push({n:nm,q:q})});
+ S.mats.forEach(function(m){var k=fk(m.n);if(!seen[k]&&!SY.pend[k])m.q=0});
+ S.mats=S.mats.filter(function(m){return seen[fk(m.n)]||isUsed(m.n)});
+ save();refresh()}
+function onLog(snap){var v=snap.val()||{};
+ SY.log=Object.keys(v).map(function(k){return v[k]}).sort(function(a,b){return (b.t||0)-(a.t||0)}).slice(0,20);
+ var e=document.getElementById('logl');if(e&&cur==3)e.innerHTML=logHtml()}
+function refresh(){
+ var a=document.activeElement,id=a&&a.id,pos=null;try{pos=a&&a.selectionStart}catch(e){}
+ if(cur==0)sum();
+ else if(cur==1){var n=document.querySelectorAll('#v1 input[id^="q"]').length;
+  if(n!=S.mats.length)stock();else S.mats.forEach(function(m,i){var e=document.getElementById('q'+i);if(e&&e!==a)e.value=m.q})}
+ if((cur==0||cur==1)&&id){var e2=document.getElementById(id);if(e2&&e2.focus){e2.focus();try{if(pos!=null)e2.setSelectionRange(pos,pos)}catch(x){}}}}
+function logc(name,a,b){if(!SY.ref||!window.firebase)return;
+ SY.ref.child('log').push({u:SY.nick||'Gracz',t:firebase.database.ServerValue.TIMESTAMP,m:name,a:a,b:b})}
+function qset(i,v){var m=S.mats[i];m.q=v;save();if(!SY.ref)return;
+ var k=fk(m.n);SY.pend[k]=1;clearTimeout(SY.tm[k]);
+ SY.tm[k]=setTimeout(function(){delete SY.pend[k];var old=SY.last[k]||0;if(old===m.q)return;SY.last[k]=m.q;SY.ref.child('stock/'+k).set({n:m.n,q:m.q});logc(m.n,old,m.q)},500)}
+function adj(i,d){var m=S.mats[i];m.q=Math.max(0,(+m.q||0)+d);var el=document.getElementById('q'+i);if(el)el.value=m.q;save();
+ if(!SY.ref)return;var k=fk(m.n),nm=m.n;
+ SY.ref.child('stock/'+k).transaction(function(c){c=c||{n:nm,q:SY.last[k]||0};c.n=nm;c.q=Math.max(0,(+c.q||0)+d);return c},
+  function(err,ok,snap){if(ok&&snap&&snap.val()){var nq=snap.val().q;logc(nm,Math.max(0,nq-d),nq)}})}
+function delMat(i){var m=S.mats[i];if(SY.ref){var k=fk(m.n);SY.ref.child('stock/'+k).remove();delete SY.last[k]}S.mats.splice(i,1);save();stock()}
+function addMat(n){n=String(n).trim();if(!n)return;ensure(n);save();
+ if(SY.ref){var k=fk(n);if(SY.last[k]==null){SY.last[k]=0;SY.ref.child('stock/'+k).set({n:n,q:0})}}stock()}
+function syncAll(){if(!SY.ref)return;var up={},c=0;
+ S.mats.forEach(function(m){var k=fk(m.n),q=+m.q||0;if((SY.last[k]||0)!==q){up[k]={n:m.n,q:q};logc(m.n,SY.last[k]||0,q);SY.last[k]=q;c++}});
+ if(c)SY.ref.child('stock').update(up)}
+function statusText(){return SY.ref?(SY.conn?'Połączono. Zmiany magazynu są wspólne i widać je od razu.':'Łączenie…'):'Niepołączono. Magazyn jest tylko na tym urządzeniu.'}
+function rnd(){var c='abcdefghjkmnpqrstuvwxyz23456789',s='',a=new Uint8Array(10);try{crypto.getRandomValues(a)}catch(e){for(var i=0;i<10;i++)a[i]=Math.random()*256}for(var j=0;j<10;j++)s+=c[a[j]%c.length];return s}
+function invite(){return location.href.split('#')[0].split('?')[0]+'?room='+SY.room}
+function copyInv(){var e=document.getElementById('inv');e.select();try{navigator.clipboard.writeText(e.value)}catch(x){}document.getElementById('cmsg').textContent='Link skopiowany. Wyślij go ekipie.'}
+function connectRoom(){var r=document.getElementById('rm').value.trim().toLowerCase(),n=document.getElementById('nk').value.trim(),m=document.getElementById('cmsg');
+ if(!/^[a-z0-9_-]{6,40}$/.test(r)){m.textContent='Kod ekipy: 6 do 40 znaków (małe litery, cyfry, - i _).';return}
+ SY.nick=n||'Gracz';ls('craftnick',SY.nick);join(r);crew()}
+function tm(t){return t?new Date(t).toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):''}
+function logHtml(){return SY.log.length?SY.log.map(function(e){return '<li><span><b>'+esc(e.u||'?')+'</b> '+esc(e.m||'')+': '+f(e.a||0)+' → '+f(e.b||0)+'</span><span class="mu">'+tm(e.t)+'</span></li>'}).join(''):'<li class="mu">Brak zmian.</li>'}
+function crew(){
+ var h='';
+ if(!window.firebase)h='<div class="card"><b>Wspólny magazyn niedostępny w tej wersji</b><div class="mu">Ta strona nie może tu połączyć się z Firebase (np. w podglądzie). Po wrzuceniu na GitHub Pages zadziała.</div></div>';
+ else if(!FBCFG.databaseURL)h='<div class="card"><b>Wspólny magazyn nie jest jeszcze skonfigurowany</b><div class="mu">W pliku index.html wklej konfigurację Firebase w miejscu FBCFG. Do tego czasu strona działa lokalnie, tylko na tym urządzeniu.</div></div>';
+ else{
+  h='<div class="card"><b>Ekipa</b><div class="mu">Wszyscy z tym samym kodem widzą i zmieniają ten sam magazyn na żywo.</div>'+
+   '<div class="row"><input type="text" id="rm" placeholder="Kod ekipy (min. 6 znaków)" value="'+esc(SY.room)+'"><button class="s" onclick="document.getElementById(\'rm\').value=rnd()">Losuj</button></div>'+
+   '<div class="row"><input type="text" id="nk" placeholder="Twój nick" value="'+esc(SY.nick)+'"><button class="s p" onclick="connectRoom()">'+(SY.ref?'Zmień':'Połącz')+'</button>'+(SY.ref?'<button class="s" onclick="leave()">Rozłącz</button>':'')+'</div>'+
+   '<div class="mu" id="cmsg">'+statusText()+'</div>'+
+   (SY.ref?'<div class="row"><input type="text" id="inv" readonly value="'+esc(invite())+'"><button class="s" onclick="copyInv()">Kopiuj link</button></div>':'')+'</div>';
+  if(SY.ref)h+='<h3>Ostatnie zmiany</h3><div class="card"><ul class="log" id="logl">'+logHtml()+'</ul></div>';
+  h+='<div class="note mu">Po połączeniu Twój magazyn zostaje zastąpiony wspólnym (jeśli ekipa już coś w nim ma). Wspólny jest tylko magazyn. Receptury masz lokalnie, a zmiany w przepisach dla wszystkich wprowadza się w pliku strony.</div>'}
+ document.getElementById('v3').innerHTML=h}
+initTheme();initSync();tab(0);
 </script>
 </body>
 </html>
