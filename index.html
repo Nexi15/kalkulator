@@ -183,7 +183,7 @@ function planData(){
 function consumePlan(){
  var p=planData();
  if(!p.n||Object.keys(p.rq).length)return;
- if(!confirm('Odjąć zużyte surowce i peso z magazynu zgodnie z tym planem?'))return;
+ if(!confirm('Odjąć zużyte surowce i peso ze wspólnego magazynu zgodnie z tym planem?'))return;
  var before=stockMap();
  S.mats.forEach(function(m){var k=key(m.n);if(p.st[k]!==undefined)m.q=Math.max(0,p.st[k])});
  save();
@@ -206,7 +206,7 @@ function planHtml(pt,rq,canConsume){
 
 function sum(){
  var h='',any=false,pq=have(PESO),pr=price(),empty=!S.mats.some(function(m){return (+m.q||0)>0}),strip='';
- if(empty)strip+='<div class="card hint"><b>Zacznij od magazynu</b><div class="mu">Wpisz stany w zakładce „Magazyn i Ekipa”, aby policzyć dostępne klamki.</div><div class="row"><button class="s p" onclick="tab(1)">Otwórz magazyn</button></div></div>';
+ if(empty)strip+='<div class="card hint"><b>Wspólny magazyn jest pusty</b><div class="mu">Wpisz stany w zakładce „Magazyn i Ekipa”, aby policzyć dostępne klamki dla całej ekipy.</div><div class="row"><button class="s p" onclick="tab(1)">Otwórz magazyn</button></div></div>';
  if(pr)strip+='<div class="strip"><div class="tile"><span class="mu">Peso meksykańskie</span><b>'+f(pq)+'</b></div><div class="tile"><span class="mu">Blueprinty do kupienia</span><b>'+Math.floor(pq/pr)+'</b><span class="mu">po '+f(pr)+' peso</span></div></div>';
  S.recipes.forEach(function(r,ri){
   if(r.t=='p')return;any=true;
@@ -253,14 +253,14 @@ function applyFlt(){
 function stockHtml(){
  var cats=[[],[],[],[]],names=['Waluta','Blueprinty','Gotowe części','Surowce'];
  S.mats.forEach(function(m,i){cats[catOf(m.n)].push(i)});
- var h='<div class="bar"><input type="search" id="srch" placeholder="Szukaj w magazynie…" oninput="applyFlt()"><div class="fbar"><button class="fbtn '+(fltMode==='all'?'on':'')+'" data-f="all" onclick="setFlt(\'all\')">Wszystkie</button><button class="fbtn '+(fltMode==='pos'?'on':'')+'" data-f="pos" onclick="setFlt(\'pos\')">Mam &gt; 0</button><button class="fbtn '+(fltMode==='miss'?'on':'')+'" data-f="miss" onclick="setFlt(\'miss\')">Brakuje do planu</button></div></div>';
+ var h='<div class="bar"><input type="search" id="srch" placeholder="Szukaj we wspólnym magazynie…" oninput="applyFlt()"><div class="fbar"><button class="fbtn '+(fltMode==='all'?'on':'')+'" data-f="all" onclick="setFlt(\'all\')">Wszystkie</button><button class="fbtn '+(fltMode==='pos'?'on':'')+'" data-f="pos" onclick="setFlt(\'pos\')">Mam &gt; 0</button><button class="fbtn '+(fltMode==='miss'?'on':'')+'" data-f="miss" onclick="setFlt(\'miss\')">Brakuje do planu</button></div></div>';
  cats.forEach(function(ix,c){if(!ix.length)return;
   h+='<h3>'+names[c]+(c==0&&price()?'<span class="mu">1 blueprint = '+f(price())+' peso</span>':'')+'</h3><div class="card list">';
   ix.forEach(function(i){var m=S.mats[i],st=c==0?10000:1;
    h+='<div class="row it" data-n="'+esc(m.n)+'" data-q="'+(+m.q||0)+'"><input type="text" class="nm" value="'+esc(m.n)+'"'+(SY.ref?' readonly':'')+' onchange="renByKey(\''+esc(key(m.n))+'\',this.value);save();renderHub();dl()"><div class="step"><button class="s" onclick="adj('+i+',-'+st+')">−</button><input type="number" min="0" id="q'+i+'" value="'+m.q+'" oninput="qset('+i+',Math.max(0,+this.value||0))"><button class="s" onclick="adj('+i+','+st+')">+</button></div><button class="x" title="Usuń" onclick="delMat('+i+')">×</button></div>'});
   h+='</div>'});
  if(!S.mats.length)h+='<div class="card mu">Magazyn jest pusty.</div>';
- h+='<div class="card io"><div class="row"><input type="text" id="nm" placeholder="Nowa pozycja w magazynie"><button class="s p" onclick="addMat(document.getElementById(\'nm\').value)">Dodaj</button></div>'+
+ h+='<div class="card io"><div class="row"><input type="text" id="nm" placeholder="Nowa pozycja we wspólnym magazynie"><button class="s p" onclick="addMat(document.getElementById(\'nm\').value)">Dodaj</button></div>'+
   '<div class="mu" style="margin-top:10px">Szybki import / eksport (format: <code>Nazwa: ilość</code>)</div><textarea id="io" placeholder="Żelazo: 20&#10;Stal: 5"></textarea><div class="row"><button class="s" onclick="exp()">Skopiuj stan</button><button class="s" onclick="imp()">Wczytaj z pola</button></div><div class="mu" id="iomsg"></div></div>';
  return h}
 
@@ -302,31 +302,31 @@ function recipesHtml(){
   '<button class="s" onclick="if(confirm(\'Usunąć wszystko, także magazyn?\')){S={v:SV,mats:[],recipes:[]};save();renderHub();dl()}">Wyczyść</button></div></div>';
  return h}
 
-var SY={db:null,ref:null,lq:null,room:'',nick:'',last:{},pend:{},tm:{},log:[],conn:false,seeded:false,cb:false};
+var SY={db:null,ref:null,lq:null,nick:'',last:{},pend:{},tm:{},log:[],conn:false,seeded:false};
 function fk(n){return encodeURIComponent(key(n)).replace(/\./g,'%2E')}
 function isUsed(n){var k=key(n);return S.recipes.some(function(r){return key(r.n)==k||r.i.some(function(g){return key(g.n)==k})})}
 function chip(){var e=document.getElementById('chip');if(!e)return;var c='',t;
- if(!window.firebase||!FBCFG.databaseURL)t='Tryb lokalny';else if(!SY.ref)t='Bez ekipy';else if(SY.conn){c='on';t='Ekipa: '+esc(SY.room)}else{c='err';t='Łączenie…'}
+ if(!window.firebase||!FBCFG.databaseURL)t='Tryb lokalny';else if(SY.conn){c='on';t='Wspólny magazyn'}else{c='err';t='Łączenie…'}
  e.innerHTML='<i class="dot '+c+'"></i>'+t}
+
 function initSync(){
  chip();
  if(!window.firebase||!FBCFG.databaseURL)return;
  try{if(!firebase.apps.length)firebase.initializeApp(FBCFG);SY.db=firebase.database()}catch(e){return}
- var u='';try{u=new URLSearchParams(location.search).get('room')||''}catch(e){}
  SY.nick=ls('craftnick');
- var r=(u||ls('craftroom')).toLowerCase();
- if(/^[a-z0-9_-]{6,40}$/.test(r)){
-  if(u&&!SY.nick){var n='';try{n=prompt('Jak masz na imię? (pokaże się w historii zmian)')||''}catch(e){}SY.nick=n.trim()||'Gracz';ls('craftnick',SY.nick)}
-  join(r)}}
-function join(r){
- leaveRef();
- SY.room=r;ls('craftroom',r);SY.ref=SY.db.ref('rooms/'+r);SY.seeded=false;SY.last={};SY.pend={};SY.log=[];
+ if(!SY.nick){
+  var n='';try{n=prompt('Podaj swój nick (będzie widoczny dla ekipy w historii zmian magazynu):')||''}catch(e){}
+  SY.nick=n.trim()||'Gracz';ls('craftnick',SY.nick)
+ }
+ SY.ref=SY.db.ref('shared');
  SY.ref.child('stock').on('value',onStock,function(){SY.conn=false;chip()});
- SY.lq=SY.ref.child('log').limitToLast(20);SY.lq.on('value',onLog);
- if(!SY.cb){SY.cb=true;SY.db.ref('.info/connected').on('value',function(s){SY.conn=!!s.val();chip();var m=document.getElementById('cmsg');if(m)m.textContent=statusText()})}
- chip()}
-function leaveRef(){if(SY.ref){SY.ref.child('stock').off();if(SY.lq)SY.lq.off()}}
-function leave(){leaveRef();SY.ref=null;SY.lq=null;SY.room='';SY.seeded=false;ls('craftroom',null);chip();if(cur===1)renderHub()}
+ SY.lq=SY.ref.child('log').limitToLast(25);
+ SY.lq.on('value',onLog);
+ SY.db.ref('.info/connected').on('value',function(s){
+  SY.conn=!!s.val();chip();
+  var m=document.getElementById('cmsg');if(m)m.textContent=statusText()
+ })}
+
 function onStock(snap){
  var v=snap.val()||{},ks=Object.keys(v);
  if(!SY.seeded){SY.seeded=true;
@@ -339,7 +339,7 @@ function onStock(snap){
  S.mats=S.mats.filter(function(m){return seen[fk(m.n)]||isUsed(m.n)});
  save();refresh()}
 function onLog(snap){var v=snap.val()||{};
- SY.log=Object.keys(v).map(function(k){return v[k]}).sort(function(a,b){return (b.t||0)-(a.t||0)}).slice(0,20);
+ SY.log=Object.keys(v).map(function(k){return v[k]}).sort(function(a,b){return (b.t||0)-(a.t||0)}).slice(0,25);
  var e=document.getElementById('logl');if(e&&cur===1)e.innerHTML=logHtml()}
 function refresh(){
  var a=document.activeElement,id=a&&a.id,pos=null;try{pos=a&&a.selectionStart}catch(e){}
@@ -362,30 +362,26 @@ function addMat(n){n=String(n).trim();if(!n)return;ensure(n);save();
 function syncAll(){if(!SY.ref)return;var up={},c=0;
  S.mats.forEach(function(m){var k=fk(m.n),q=+m.q||0;if((SY.last[k]||0)!==q){up[k]={n:m.n,q:q};logc(m.n,SY.last[k]||0,q);SY.last[k]=q;c++}});
  if(c)SY.ref.child('stock').update(up)}
-function statusText(){return SY.ref?(SY.conn?'Połączono na żywo z magazynem ekipy.':'Łączenie z bazą…'):'Tryb lokalny (tylko na tym urządzeniu).'}
-function rnd(){var c='abcdefghjkmnpqrstuvwxyz23456789',s='',a=new Uint8Array(10);try{crypto.getRandomValues(a)}catch(e){for(var i=0;i<10;i++)a[i]=Math.random()*256}for(var j=0;j<10;j++)s+=c[a[j]%c.length];return s}
-function invite(){return location.href.split('#')[0].split('?')[0]+'?room='+SY.room}
-function copyInv(){var e=document.getElementById('inv');e.select();try{navigator.clipboard.writeText(e.value)}catch(x){}document.getElementById('cmsg').textContent='Link skopiowany. Wyślij go znajomym.'}
-function connectRoom(){var r=document.getElementById('rm').value.trim().toLowerCase(),n=document.getElementById('nk').value.trim(),m=document.getElementById('cmsg');
- if(!/^[a-z0-9_-]{6,40}$/.test(r)){m.textContent='Kod ekipy: 6–40 znaków (małe litery, cyfry, - oraz _).';return}
- SY.nick=n||'Gracz';ls('craftnick',SY.nick);join(r);renderHub()}
+function statusText(){return SY.ref?(SY.conn?'Połączono. Cała ekipa korzysta z tego samego wspólnego magazynu na żywo.':'Łączenie ze wspólnym magazynem…'):'Tryb lokalny (brak połączenia z bazą).'}
+function saveNick(){
+ var n=document.getElementById('nk').value.trim();
+ SY.nick=n||'Gracz';ls('craftnick',SY.nick);
+ var m=document.getElementById('cmsg');if(m)m.textContent='Zapisano nick: '+SY.nick+'. '+statusText();
+}
 function tm(t){return t?new Date(t).toLocaleString('pl-PL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):''}
 function logHtml(){return SY.log.length?SY.log.map(function(e){return '<li><span><b>'+esc(e.u||'?')+'</b> '+esc(e.m||'')+': '+f(e.a||0)+' → '+f(e.b||0)+'</span><span class="mu">'+tm(e.t)+'</span></li>'}).join(''):'<li class="mu">Brak zarejestrowanych zmian.</li>'}
 
 function crewHtml(){
- if(!window.firebase||!FBCFG.databaseURL)return '<div class="card"><b>Wspólny magazyn</b><div class="mu">Skonfiguruj FBCFG w kodzie, aby udostępniać magazyn ekipie.</div></div>';
- var h='<div class="card" style="max-width:780px"><b>Pokój ekipy</b><div class="mu">Ten sam kod pokoju = wspólny magazyn i historia zmian na żywo.</div>'+
-  '<div class="row"><input type="text" id="rm" placeholder="Kod pokoju (min. 6 znaków)" value="'+esc(SY.room)+'"><button class="s" onclick="document.getElementById(\'rm\').value=rnd()">Losuj</button></div>'+
-  '<div class="row"><input type="text" id="nk" placeholder="Twój nick" value="'+esc(SY.nick)+'"><button class="s p" onclick="connectRoom()">'+(SY.ref?'Zmień':'Połącz')+'</button>'+(SY.ref?'<button class="s" onclick="leave()">Rozłącz</button>':'')+'</div>'+
-  '<div class="mu" id="cmsg">'+statusText()+'</div>'+
-  (SY.ref?'<div class="row"><input type="text" id="inv" readonly value="'+esc(invite())+'"><button class="s" onclick="copyInv()">Kopiuj link</button></div>':'')+'</div>';
- if(SY.ref)h+='<div class="card" style="max-width:780px"><b>Ostatnie zmiany</b><ul class="log" id="logl">'+logHtml()+'</ul></div>';
- return h}
+ if(!window.firebase||!FBCFG.databaseURL)return '<div class="card"><b>Wspólny magazyn</b><div class="mu">Brak konfiguracji bazy danych.</div></div>';
+ return '<div class="card" style="max-width:780px"><b>Wspólny magazyn ekipy</b><div class="mu">Każdy, kto wejdzie na tę stronę, widzi i zmienia dokładnie ten sam magazyn na żywo.</div>'+
+  '<div class="row"><input type="text" id="nk" placeholder="Twój nick w ekipie" value="'+esc(SY.nick)+'"><button class="s p" onclick="saveNick()">Zapisz nick</button></div>'+
+  '<div class="mu" id="cmsg">'+statusText()+'</div></div>'+
+  '<div class="card" style="max-width:780px"><b>Ostatnie zmiany w magazynie</b><ul class="log" id="logl">'+logHtml()+'</ul></div>'}
 
 function renderHub(){
  document.getElementById('v1').innerHTML=
   '<h2>Magazyn</h2>'+stockHtml()+
-  '<h2 id="crew-sec">Ekipa</h2>'+crewHtml()+
+  '<h2 id="crew-sec">Ekipa i historia</h2>'+crewHtml()+
   '<h2>Receptury</h2>'+recipesHtml();
  applyFlt()}
 
