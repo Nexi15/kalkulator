@@ -56,7 +56,8 @@ h3 .mu{font:500 13px/1 var(--body)}
 .ok{color:var(--ok)}.bad{color:var(--bad)}
 .plan:not(:empty){background:rgba(251,191,36,.08);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:14.5px}
 .plan2{margin-top:8px;font-size:14.5px}
-.mini-ing{margin-top:12px;font-size:13.5px;color:var(--mu);display:flex;flex-wrap:wrap;gap:6px 12px}
+.mini-ing{margin-top:12px;font-size:13px;color:var(--mu);display:flex;flex-wrap:wrap;gap:5px 10px}
+.mini-ing span{background:var(--field);padding:2px 8px;border-radius:8px}
 .mini-ing span.lim-i{color:var(--hi);font-weight:600}
 input{font:inherit;color:var(--tx);background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;min-width:0}
 input[type=number]{width:92px;text-align:right;font-variant-numeric:tabular-nums}
@@ -120,7 +121,7 @@ function build(){var rec=[],names={};
   rec.push({n:kor,t:'p',i:[{n:'Korpus SNS',q:4},{n:'Kawałek stopu metalu',q:3},{n:o[1],q:5},{n:'Kawałek opony',q:2},{n:'Gumowa podkładka',q:2}]});
   rec.push({n:luf,t:'p',i:[{n:'Lufa SNS',q:3},{n:o[2],q:o[3]||2},{n:'Wał od silnika',q:5},{n:'Drzwiczki do sejfu',q:1},{n:'Zardzewiała blacha',q:3}]});
   rec.push({n:'Blueprint '+v,t:'p',b:1,i:[{n:PESO,q:BP}]})});
- rec.forEach(function(r){if(r.t=='p')names[key(r.n)]=r.n;r.i.forEach(function(g){names[key(g.n)]=g.n})});
+ rec.forEach(function(r){r.i.forEach(function(g){var pr=rec.find(function(x){return key(x.n)==key(g.n)});if(!pr)names[key(g.n)]=g.n})});
  var mats=Object.keys(names).map(function(k){return names[k]}).sort(function(a,b){return a.localeCompare(b,'pl')}).map(function(n){return {n:n,q:0}});
  return {v:SV,mats:mats,recipes:rec}}
 
@@ -139,18 +140,37 @@ function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
 function key(n){return String(n).trim().toLowerCase()}
 function have(n){var k=key(n),t=0;S.mats.forEach(m=>{if(key(m.n)==k)t+=+m.q||0});return t}
-function ensure(n){n=String(n).trim();if(!n)return;if(!S.mats.some(m=>key(m.n)==key(n)))S.mats.push({n:n,q:0})}
+function ensure(n){n=String(n).trim();if(!n)return;var pr=find(n);if(pr&&pr.t=='p')return;if(!S.mats.some(m=>key(m.n)==key(n)))S.mats.push({n:n,q:0})}
 function find(n){var k=key(n);return S.recipes.find(r=>key(r.n)==k)}
 function valid(r){return r&&r.i.some(g=>g.n.trim()&&(+g.q||0)>0)}
-function stockMap(){var o={};S.mats.forEach(m=>{var k=key(m.n);o[k]=(o[k]||0)+(+m.q||0)});return o}
+function stockMap(){var o={};S.mats.forEach(m=>{var k=key(m.n);if(!isPart(m.n))o[k]=(o[k]||0)+(+m.q||0)});return o}
+function isPart(n){var r=find(n);return !!(r&&r.t=='p'&&valid(r))}
 function add(o,n,c){var k=key(n);if(!o[k])o[k]={n:n.trim(),c:0};o[k].c+=c}
+
 function resolve(name,n,st,req,pt,d){
  if(n<=0)return;
- var k=key(name),take=Math.min(st[k]||0,n);st[k]=(st[k]||0)-take;n-=take;
- if(n<=0)return;
  var r=find(name);
- if(valid(r)&&d<12){add(pt,name,n);r.i.forEach(g=>{var q=+g.q||0;if(q>0&&g.n.trim())resolve(g.n,n*q,st,req,pt,d+1)})}
- else add(req,name,n)}
+ if(valid(r)&&d<12){
+  if(r.t=='p')add(pt,name,n);
+  r.i.forEach(g=>{var q=+g.q||0;if(q>0&&g.n.trim())resolve(g.n,n*q,st,req,pt,d+1)});
+  return;
+ }
+ var k=key(name),take=Math.min(st[k]||0,n);
+ st[k]=(st[k]||0)-take;n-=take;
+ if(n>0)add(req,name,n);
+}
+
+function rawNeeds(name){
+ var raw={};
+ function walk(nm,mult,d){
+  var r=find(nm);
+  if(valid(r)&&d<12){r.i.forEach(function(g){var q=+g.q||0;if(q>0&&g.n.trim())walk(g.n,mult*q,d+1)})}
+  else add(raw,nm,mult);
+ }
+ walk(name,1,0);
+ return Object.values(raw);
+}
+
 function maxN(name){
  if(!valid(find(name)))return have(name);
  function ok(n){var rq={};resolve(name,n,stockMap(),rq,{},0);return !Object.keys(rq).length}
@@ -167,17 +187,17 @@ function dl(){document.getElementById('dl').innerHTML=S.mats.map(m=>'<option val
 
 var cur=0;
 function tab(i){cur=i;document.getElementById('v0').hidden=i!==0;document.getElementById('v1').hidden=i!==1;document.getElementById('t0').className=i===0?'on':'';document.getElementById('t1').className=i===1?'on':'';
- S.recipes.forEach(function(r){if(r.t=='p')ensure(r.n)});
+ S.mats=S.mats.filter(function(m){return !isPart(m.n)});
  if(i===0)sum();else renderHub();dl()}
 function goCrew(){tab(1);setTimeout(function(){var el=document.getElementById('crew-sec');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},30)}
 
 function f(n){return Number(n).toLocaleString('pl-PL')}
 function price(){var r=S.recipes.find(function(x){return x.b&&valid(x)});return r?(+r.i[0].q||0):0}
-function catOf(n){var k=key(n),r=find(n);if(k==key(PESO))return 0;if(r&&r.b)return 1;if(r&&r.t=='p'&&valid(r))return 2;return 3}
+function catOf(n){var k=key(n);if(k==key(PESO))return 0;return 1}
 
 function planData(){
  var st=stockMap(),rq={},pt={},n=0;
- S.recipes.forEach(function(r){if(r.t!='p'&&(+r.w||0)>0&&valid(r)){n++;resolve(r.n,r.w,st,rq,pt,0);delete pt[key(r.n)]}});
+ S.recipes.forEach(function(r){if(r.t!='p'&&(+r.w||0)>0&&valid(r)){n++;resolve(r.n,r.w,st,rq,pt,0)}});
  return {n:n,st:st,rq:rq,pt:pt}}
 
 function consumePlan(){
@@ -197,46 +217,44 @@ function planHtml(pt,rq,canConsume){
  Object.values(pt).forEach(function(o){var r=find(o.n);if(r&&r.b)buy.push(esc(o.n)+' ×'+o.c+' ('+f(o.c*(+r.i[0].q||0))+' peso)');else mk.push(esc(o.n)+' ×'+o.c)});
  Object.values(rq).forEach(function(o){miss.push(esc(o.n)+' '+f(o.c))});
  var h='';
- if(mk.length)h+='<div><span class="mu">Do zrobienia:</span> '+mk.join(', ')+'</div>';
+ if(mk.length)h+='<div><span class="mu">Do złożenia z surowców:</span> '+mk.join(', ')+'</div>';
  if(buy.length)h+='<div><span class="mu">Do kupienia:</span> '+buy.join(', ')+'</div>';
- if(miss.length)h+='<div class="bad">Brakuje: '+miss.join(', ')+'</div>';
- else{h+='<div class="ok">Masz wszystko, możesz robić.</div>';
-  if(canConsume)h+='<div class="row" style="margin-top:10px"><button class="s p" onclick="consumePlan()">Odejmij zużyte zasoby z magazynu</button></div>'}
+ if(miss.length)h+='<div class="bad">Brakuje surowców: '+miss.join(', ')+'</div>';
+ else{h+='<div class="ok">Masz wszystkie surowce i peso, możesz robić.</div>';
+  if(canConsume)h+='<div class="row" style="margin-top:10px"><button class="s p" onclick="consumePlan()">Odejmij zużyte surowce z magazynu</button></div>'}
  return h}
 
 function sum(){
  var h='',any=false,pq=have(PESO),pr=price(),empty=!S.mats.some(function(m){return (+m.q||0)>0}),strip='';
- if(empty)strip+='<div class="card hint"><b>Wspólny magazyn jest pusty</b><div class="mu">Wpisz stany w zakładce „Magazyn i Ekipa”, aby policzyć dostępne klamki dla całej ekipy.</div><div class="row"><button class="s p" onclick="tab(1)">Otwórz magazyn</button></div></div>';
+ if(empty)strip+='<div class="card hint"><b>Wspólny magazyn surowców jest pusty</b><div class="mu">Wpisz surowce i peso w zakładce „Magazyn i Ekipa”, aby policzyć dostępne klamki.</div><div class="row"><button class="s p" onclick="tab(1)">Otwórz magazyn</button></div></div>';
  if(pr)strip+='<div class="strip"><div class="tile"><span class="mu">Peso meksykańskie</span><b>'+f(pq)+'</b></div><div class="tile"><span class="mu">Blueprinty do kupienia</span><b>'+Math.floor(pq/pr)+'</b><span class="mu">po '+f(pr)+' peso</span></div></div>';
  S.recipes.forEach(function(r,ri){
   if(r.t=='p')return;any=true;
   var ok=valid(r),mx=ok?maxN(r.n):0,lim='';
   if(ok){var rq={};resolve(r.n,mx+1,stockMap(),rq,{},0);lim=Object.values(rq).map(function(o){return esc(o.n)}).join(', ')}
-  var items=[],mn=Infinity;
-  r.i.forEach(function(g){var q=+g.q||0;if(q<=0||!g.n.trim())return;
-   var p2=find(g.n),isP=valid(p2),tot=isP?maxN(g.n):have(g.n),c=Math.floor(tot/q);
-   if(c<mn)mn=c;items.push({n:g.n,q:q,c:c})});
-  var mini=items.map(function(o){return '<span'+(o.c==mn?' class="lim-i"':'')+'>'+esc(o.n)+(o.q>1?' ×'+o.q:'')+' ('+f(o.c)+')</span>'}).join('');
-  h+='<div class="card w '+(mx>0?'go':'no')+'"><div class="hd"><div><b>'+esc(r.n)+'</b><span class="pill '+(mx>0?'go':'no')+'">'+(mx>0?'Można robić':'Brak materiałów')+'</span><div class="mu">Możesz zrobić</div><div class="big '+(mx>0?'ok':'bad')+'">'+f(mx)+'<small>szt.</small></div>'+
+  var needs=ok?rawNeeds(r.n):[],mn=Infinity;
+  needs.forEach(function(o){o.have=have(o.n);o.can=Math.floor(o.have/o.c);if(o.can<mn)mn=o.can});
+  var mini=needs.map(function(o){return '<span'+(o.can==mn?' class="lim-i"':'')+'>'+esc(o.n)+': '+f(o.have)+'/'+f(o.c)+'</span>'}).join('');
+  h+='<div class="card w '+(mx>0?'go':'no')+'"><div class="hd"><div><b>'+esc(r.n)+'</b><span class="pill '+(mx>0?'go':'no')+'">'+(mx>0?'Można robić':'Brak surowców')+'</span><div class="mu">Zrobisz z surowców</div><div class="big '+(mx>0?'ok':'bad')+'">'+f(mx)+'<small>szt.</small></div>'+
    (lim?'<div class="mu">'+(mx>0?'Ogranicza: ':'Brakuje: ')+lim+'</div>':'')+'</div>'+
    '<div class="want"><div class="mu">Chcę zrobić</div><div class="step"><button class="s" onclick="bump('+ri+',-1)">−</button><input type="number" min="0" id="w'+ri+'" value="'+(r.w||0)+'" oninput="want('+ri+',this.value)"><button class="s" onclick="bump('+ri+',1)">+</button></div></div></div>'+
    (mini?'<div class="mini-ing">'+mini+'</div>':'')+
    '<div id="b'+ri+'" class="plan"></div></div>'});
  if(!any)h='<div class="card mu">Brak receptur broni. Dodaj je w zakładce „Magazyn i Ekipa”.</div>';
- document.getElementById('v0').innerHTML='<div class="top2">'+strip+'</div><div id="tot"></div>'+h+(any?'<div class="note mu">W nawiasach podano, na ile sztuk starcza dany składnik przy uwzględnieniu części i blueprintów.</div>':'');
+ document.getElementById('v0').innerHTML='<div class="top2">'+strip+'</div><div id="tot"></div>'+h+(any?'<div class="note mu">Liczone bezpośrednio z surowców i peso w magazynie (części pośrednie przeliczane są automatycznie na surowce). Przy składnikach podano: masz / potrzeba na 1 szt.</div>':'');
  S.recipes.forEach(function(r,ri){if(r.t!='p')want(ri,r.w||0,1)})}
 function bump(ri,d){var el=document.getElementById('w'+ri);el.value=Math.max(0,(+el.value||0)+d);want(ri,el.value)}
 function want(ri,v,ns){
  var r=S.recipes[ri];r.w=Math.max(0,+v||0);
  var el=document.getElementById('b'+ri);
  if(el){if(!r.w||!valid(r))el.innerHTML='';
-  else{var rq={},pt={};resolve(r.n,r.w,stockMap(),rq,pt,0);delete pt[key(r.n)];
+  else{var rq={},pt={};resolve(r.n,r.w,stockMap(),rq,pt,0);
    el.innerHTML='<div class="mu"><b>Plan na '+r.w+' szt.</b></div>'+planHtml(pt,rq,false)}}
  total();if(!ns)save()}
 function total(){var el=document.getElementById('tot');if(!el)return;
  var p=planData();
  if(!p.n){el.innerHTML='';return}
- el.innerHTML='<div class="card"><b>Razem dla wszystkich planowanych broni</b><div class="mu">Wspólny magazyn i wspólne peso, nic nie liczy się podwójnie.</div><div class="plan2">'+planHtml(p.pt,p.rq,true)+'</div></div>'}
+ el.innerHTML='<div class="card"><b>Razem dla wszystkich planowanych broni</b><div class="mu">Wspólne surowce i wspólne peso, nic nie liczy się podwójnie.</div><div class="plan2">'+planHtml(p.pt,p.rq,true)+'</div></div>'}
 
 var fltMode='all';
 function setFlt(m){fltMode=m;document.querySelectorAll('.fbtn').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-f')===m)});applyFlt()}
@@ -251,16 +269,16 @@ function applyFlt(){
   e.style.display=(matchTxt&&matchMode)?'':'none'})}
 
 function stockHtml(){
- var cats=[[],[],[],[]],names=['Waluta','Blueprinty','Gotowe części','Surowce'];
- S.mats.forEach(function(m,i){cats[catOf(m.n)].push(i)});
- var h='<div class="bar"><input type="search" id="srch" placeholder="Szukaj we wspólnym magazynie…" oninput="applyFlt()"><div class="fbar"><button class="fbtn '+(fltMode==='all'?'on':'')+'" data-f="all" onclick="setFlt(\'all\')">Wszystkie</button><button class="fbtn '+(fltMode==='pos'?'on':'')+'" data-f="pos" onclick="setFlt(\'pos\')">Mam &gt; 0</button><button class="fbtn '+(fltMode==='miss'?'on':'')+'" data-f="miss" onclick="setFlt(\'miss\')">Brakuje do planu</button></div></div>';
+ var cats=[[],[]],names=['Waluta','Surowce'];
+ S.mats.forEach(function(m,i){if(!isPart(m.n))cats[catOf(m.n)].push(i)});
+ var h='<div class="bar"><input type="search" id="srch" placeholder="Szukaj we wspólnym magazynie surowców…" oninput="applyFlt()"><div class="fbar"><button class="fbtn '+(fltMode==='all'?'on':'')+'" data-f="all" onclick="setFlt(\'all\')">Wszystkie</button><button class="fbtn '+(fltMode==='pos'?'on':'')+'" data-f="pos" onclick="setFlt(\'pos\')">Mam &gt; 0</button><button class="fbtn '+(fltMode==='miss'?'on':'')+'" data-f="miss" onclick="setFlt(\'miss\')">Brakuje do planu</button></div></div>';
  cats.forEach(function(ix,c){if(!ix.length)return;
   h+='<h3>'+names[c]+(c==0&&price()?'<span class="mu">1 blueprint = '+f(price())+' peso</span>':'')+'</h3><div class="card list">';
   ix.forEach(function(i){var m=S.mats[i],st=c==0?10000:1;
    h+='<div class="row it" data-n="'+esc(m.n)+'" data-q="'+(+m.q||0)+'"><input type="text" class="nm" value="'+esc(m.n)+'"'+(SY.ref?' readonly':'')+' onchange="renByKey(\''+esc(key(m.n))+'\',this.value);save();renderHub();dl()"><div class="step"><button class="s" onclick="adj('+i+',-'+st+')">−</button><input type="number" min="0" id="q'+i+'" value="'+m.q+'" oninput="qset('+i+',Math.max(0,+this.value||0))"><button class="s" onclick="adj('+i+','+st+')">+</button></div><button class="x" title="Usuń" onclick="delMat('+i+')">×</button></div>'});
   h+='</div>'});
  if(!S.mats.length)h+='<div class="card mu">Magazyn jest pusty.</div>';
- h+='<div class="card io"><div class="row"><input type="text" id="nm" placeholder="Nowa pozycja we wspólnym magazynie"><button class="s p" onclick="addMat(document.getElementById(\'nm\').value)">Dodaj</button></div>'+
+ h+='<div class="card io"><div class="row"><input type="text" id="nm" placeholder="Nowy surowiec we wspólnym magazynie"><button class="s p" onclick="addMat(document.getElementById(\'nm\').value)">Dodaj</button></div>'+
   '<div class="mu" style="margin-top:10px">Szybki import / eksport (format: <code>Nazwa: ilość</code>)</div><textarea id="io" placeholder="Żelazo: 20&#10;Stal: 5"></textarea><div class="row"><button class="s" onclick="exp()">Skopiuj stan</button><button class="s" onclick="imp()">Wczytaj z pola</button></div><div class="mu" id="iomsg"></div></div>';
  return h}
 
@@ -280,9 +298,9 @@ function loadDef(){if(!confirm('Wczytać receptury z gry? Obecne receptury zosta
 function card(r,ri){
  var h='<div class="card"><div class="row"><input type="text" value="'+esc(r.n)+'" placeholder="Nazwa" onchange="rn('+ri+',this.value)"><button class="x" onclick="if(confirm(\'Usunąć recepturę?\')){S.recipes.splice('+ri+',1);save();renderHub();dl()}">×</button></div>';
  r.i.forEach(function(g,gi){
-  h+='<div class="row"><input type="text" list="dl" value="'+esc(g.n)+'" placeholder="Materiał lub część" onchange="S.recipes['+ri+'].i['+gi+'].n=this.value;ensure(this.value);save();renderHub();dl()"><input type="number" min="0" value="'+g.q+'" oninput="S.recipes['+ri+'].i['+gi+'].q=+this.value||0;save()"><button class="x" onclick="S.recipes['+ri+'].i.splice('+gi+',1);save();renderHub();dl()">×</button></div>'});
+  h+='<div class="row"><input type="text" list="dl" value="'+esc(g.n)+'" placeholder="Surowiec lub część" onchange="S.recipes['+ri+'].i['+gi+'].n=this.value;ensure(this.value);save();renderHub();dl()"><input type="number" min="0" value="'+g.q+'" oninput="S.recipes['+ri+'].i['+gi+'].q=+this.value||0;save()"><button class="x" onclick="S.recipes['+ri+'].i.splice('+gi+',1);save();renderHub();dl()">×</button></div>'});
  return h+'<button class="s" onclick="S.recipes['+ri+'].i.push({n:\'\',q:1});save();renderHub();dl()">+ składnik</button></div>'}
-function rn(ri,v){var r=S.recipes[ri];if(!v.trim())return renderHub();if(r.t=='p'){ren(r.n,v);ensure(r.n)}else r.n=v;save();renderHub();dl()}
+function rn(ri,v){var r=S.recipes[ri];if(!v.trim())return renderHub();if(r.t=='p')ren(r.n,v);else r.n=v;save();renderHub();dl()}
 function recipesHtml(){
  var shown={},h='<div class="rec-wrap">';
  function sub(r,d){var o='';
@@ -297,14 +315,14 @@ function recipesHtml(){
  S.recipes.forEach(function(r,ri){if(r.t=='p'&&!shown[key(r.n)])rest+=card(r,ri)});
  if(rest)h+='<h3>Pozostałe części</h3>'+rest;
  h+='<div class="row" style="margin-top:16px"><button class="s p" onclick="S.recipes.push({n:\'Nowa broń\',t:\'w\',w:0,i:[]});save();renderHub();dl()">+ nowa broń</button> '+
-  '<button class="s p" onclick="S.recipes.push({n:\'Nowa część\',t:\'p\',i:[]});ensure(\'Nowa część\');save();renderHub();dl()">+ nowa część</button> '+
+  '<button class="s p" onclick="S.recipes.push({n:\'Nowa część\',t:\'p\',i:[]});save();renderHub();dl()">+ nowa część</button> '+
   '<button class="s" onclick="loadDef()">Domyślne receptury</button> '+
   '<button class="s" onclick="if(confirm(\'Usunąć wszystko, także magazyn?\')){S={v:SV,mats:[],recipes:[]};save();renderHub();dl()}">Wyczyść</button></div></div>';
  return h}
 
 var SY={db:null,ref:null,lq:null,nick:'',last:{},pend:{},tm:{},log:[],conn:false,seeded:false};
 function fk(n){return encodeURIComponent(key(n)).replace(/\./g,'%2E')}
-function isUsed(n){var k=key(n);return S.recipes.some(function(r){return key(r.n)==k||r.i.some(function(g){return key(g.n)==k})})}
+function isUsed(n){var k=key(n);if(isPart(n))return false;return S.recipes.some(function(r){return r.i.some(function(g){return key(g.n)==k})})}
 function chip(){var e=document.getElementById('chip');if(!e)return;var c='',t;
  if(!window.firebase||!FBCFG.databaseURL)t='Tryb lokalny';else if(SY.conn){c='on';t='Wspólny magazyn'}else{c='err';t='Łączenie…'}
  e.innerHTML='<i class="dot '+c+'"></i>'+t}
@@ -330,13 +348,13 @@ function initSync(){
 function onStock(snap){
  var v=snap.val()||{},ks=Object.keys(v);
  if(!SY.seeded){SY.seeded=true;
-  if(!ks.length){var up={},c=0;S.mats.forEach(function(m){if((+m.q||0)>0){up[fk(m.n)]={n:m.n,q:+m.q};SY.last[fk(m.n)]=+m.q;c++}});if(c)SY.ref.child('stock').update(up);return}}
+  if(!ks.length){var up={},c=0;S.mats.forEach(function(m){if(!isPart(m.n)&&(+m.q||0)>0){up[fk(m.n)]={n:m.n,q:+m.q};SY.last[fk(m.n)]=+m.q;c++}});if(c)SY.ref.child('stock').update(up);return}}
  SY.last={};var seen={};
- ks.forEach(function(k){var it=v[k]||{},nm=it.n||k,q=Math.max(0,+it.q||0);seen[k]=1;SY.last[k]=q;
+ ks.forEach(function(k){var it=v[k]||{},nm=it.n||k,q=Math.max(0,+it.q||0);if(isPart(nm))return;seen[k]=1;SY.last[k]=q;
   if(SY.pend[k])return;
   var m=S.mats.find(function(x){return key(x.n)==key(nm)});if(m)m.q=q;else S.mats.push({n:nm,q:q})});
  S.mats.forEach(function(m){var k=fk(m.n);if(!seen[k]&&!SY.pend[k])m.q=0});
- S.mats=S.mats.filter(function(m){return seen[fk(m.n)]||isUsed(m.n)});
+ S.mats=S.mats.filter(function(m){return !isPart(m.n)&&(seen[fk(m.n)]||isUsed(m.n))});
  save();refresh()}
 function onLog(snap){var v=snap.val()||{};
  SY.log=Object.keys(v).map(function(k){return v[k]}).sort(function(a,b){return (b.t||0)-(a.t||0)}).slice(0,25);
@@ -357,10 +375,10 @@ function adj(i,d){var m=S.mats[i];m.q=Math.max(0,(+m.q||0)+d);var el=document.ge
  SY.ref.child('stock/'+k).transaction(function(c){c=c||{n:nm,q:SY.last[k]||0};c.n=nm;c.q=Math.max(0,(+c.q||0)+d);return c},
   function(err,ok,snap){if(ok&&snap&&snap.val()){var nq=snap.val().q;logc(nm,Math.max(0,nq-d),nq)}})}
 function delMat(i){var m=S.mats[i];if(SY.ref){var k=fk(m.n);SY.ref.child('stock/'+k).remove();delete SY.last[k]}S.mats.splice(i,1);save();renderHub()}
-function addMat(n){n=String(n).trim();if(!n)return;ensure(n);save();
+function addMat(n){n=String(n).trim();if(!n||isPart(n))return;ensure(n);save();
  if(SY.ref){var k=fk(n);if(SY.last[k]==null){SY.last[k]=0;SY.ref.child('stock/'+k).set({n:n,q:0})}}renderHub()}
 function syncAll(){if(!SY.ref)return;var up={},c=0;
- S.mats.forEach(function(m){var k=fk(m.n),q=+m.q||0;if((SY.last[k]||0)!==q){up[k]={n:m.n,q:q};logc(m.n,SY.last[k]||0,q);SY.last[k]=q;c++}});
+ S.mats.forEach(function(m){if(isPart(m.n))return;var k=fk(m.n),q=+m.q||0;if((SY.last[k]||0)!==q){up[k]={n:m.n,q:q};logc(m.n,SY.last[k]||0,q);SY.last[k]=q;c++}});
  if(c)SY.ref.child('stock').update(up)}
 function statusText(){return SY.ref?(SY.conn?'Połączono. Cała ekipa korzysta z tego samego wspólnego magazynu na żywo.':'Łączenie ze wspólnym magazynem…'):'Tryb lokalny (brak połączenia z bazą).'}
 function saveNick(){
@@ -380,7 +398,7 @@ function crewHtml(){
 
 function renderHub(){
  document.getElementById('v1').innerHTML=
-  '<h2>Magazyn</h2>'+stockHtml()+
+  '<h2>Magazyn surowców</h2>'+stockHtml()+
   '<h2 id="crew-sec">Ekipa i historia</h2>'+crewHtml()+
   '<h2>Receptury</h2>'+recipesHtml();
  applyFlt()}
